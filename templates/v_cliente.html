@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1 align="center">{{ title }}</h1>
+<table align="center" border="1">
+	<tr>
+		<td> Razon Social </td>
+		<td> {{instance.razon_social}}</td>
+	</tr>
+	<tr>
+		<td>Comercio</td>
+		<td>{{instance.comercio}}</td>
+	</tr>
+	<tr>
+		<td>Domicilio</td>
+		<td>{{instance.domicilio}}</td>
+	</tr>
+	<tr>
+		<td>Cuit</td>
+		<td>{{instance.cuit}}</td>
+	</tr>
+</table>
+
+{% endblock %}

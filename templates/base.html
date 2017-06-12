@@ -1,0 +1,34 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html >
+  <head>
+	 <meta charset="UTF-8">
+	 <title></title>
+	 <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"> <!-- meta viewport para maparatos mobiles -->
+
+	 <link rel="stylesheet" href="/static/css/bootstrap.css">
+	
+  </head>
+	<body>
+		<!-- CABECERA -->
+		
+		<!-- CONTENIDO -->
+		<div class="container">
+			{% block content %}
+			{% endblock %}
+		
+		</div>
+		<!-- PIE -->
+		<footer>
+			<div class="container">
+				<p align="center">Copyright (c) 2017</p>
+			</div>
+		</footer>
+		<!-- JAVASCRIPT -->
+		<script src="/static/js/jquery.js"></script>
+		<script src="/static/js/bootstrap.js"></script>
+		{% block javascript %} 
+		{% endblock %}
+	</body>
+</html>
