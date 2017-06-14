@@ -14,6 +14,7 @@ class Proveedor(models.Model):
 
 	def __str__(self):
 		return ('%s - %s')%(self.razon_social, self.cuit)
+
 class Cliente (models.Model):
 	razon_social = models.CharField("Titular / Razon Social", max_length=30)
 	comercio = models.CharField(max_length=30)
