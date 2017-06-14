@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.urlresolvers import reverse 
 
 class Proveedor(models.Model):
 	razon_social = models.CharField(max_length=30)
@@ -12,6 +13,9 @@ class Proveedor(models.Model):
 		)
 	iva = models.CharField("IVA", max_length=30, choices=iva_choices)
 
+	def get_absolute_url(self):
+		return reverse("iva:d_proveedor", kwargs={"id":self.id})
+
 	def __str__(self):
 		return ('%s - %s')%(self.razon_social, self.cuit)
 
@@ -21,10 +25,11 @@ class Cliente (models.Model):
 	domicilio = models.CharField(max_length=30)
 	cuit = models.CharField("CUIT", max_length=30)
 
-class Periodo(models.Model):
+	def get_absolute_url(self):
+		return reverse("iva:d_cliente", kwargs={"id":self.id})
 
 	def __str__(self):
-		return('%s %s')%(self.mes, self.anio)
+		return ('%s - %s')%(self.razon_social, self.cuit)
 
 class Libro(models.Model):
 	cliente = models.ForeignKey(Cliente)
@@ -45,12 +50,11 @@ class Libro(models.Model):
 		)
 	mes = models.CharField(max_length=30, choices=mes_choices)
 	anio = models.CharField(max_length=4, default=2017)
-	
-	fecha = models.DateField(auto_now=True)
+	fecha = models.DateField(auto_now=False)
 	nfactura = models.CharField(max_length=30)
 	tipo = models.CharField(max_length=2, default='C')
-	Proveedor = models.ForeignKey(Proveedor)
-	ing_porcentaje = models.IntegerField("Importe Neto Gravado (%)", default=0, validators=[MaxValueValidator(100)])
+	proveedor = models.ForeignKey(Proveedor)
+	ing_porcentaje = models.IntegerField("Importe Neto Gravado (%)", default=0)
 	ing = models.IntegerField("Importe Neto Gravado", default=0) 
 	cng = models.IntegerField("Conceptos No Gravados", default=0)
 	op_ex = models.IntegerField("Operaciones Exentas")
@@ -59,3 +63,6 @@ class Libro(models.Model):
 	total_fac = models.IntegerField("TOTAL Facturado")
 	cred_fisc = models.IntegerField("Cred. Fiscal N/Creditos", default=0)
 	ret_perc = models.IntegerField("Retenciones / Percepciones", default=0)
+
+	def get_absolute_url(self):
+		return reverse("iva:d_libro", kwargs={"id":self.id})

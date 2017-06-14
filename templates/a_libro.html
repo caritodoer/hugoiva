@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1 align="center">{{ title }}</h1>
+<form method="POST" action=""> {% csrf_token %}
+<table align="center" border="1">
+	<tr>
+		<td> Cliente </td>
+		<td> {{form.cliente}}</td>
+	
+		<td>Mes</td>
+		<td>{{form.mes}}</td>
+	
+		<td>Año</td>
+		<td>{{form.anio}}</td>
+	
+		<td>Fecha</td>
+		<td>{{form.fecha}}</td>
+	
+		<td>Proveedor</td>
+		<td>{{form.proveedor}}</td>
+	</tr>
+	<tr></tr>
+	<tr></tr>
+	<tr>
+		<td colspan="3">Nro Factura</td>
+		<td colspan="3">tipo</td>
+		<td colspan="3">Total facturacion</td>
+		<td>Agregar</td>
+	</tr>
+	<tr>
+		<td colspan="3">{{form.nfactura}}</td>
+		<td colspan="3">{{form.tipo}}</td>
+		<td colspan="3">{{form.total_fac}}</td>
+		<td>Eliminar</td>
+	</tr>
+	<tr>
+		<td colspan="10" align="center">Aca seria el colapsado donde va la informacion que no utiliza nunca</td>
+	</tr>
+	<tr>
+		<td colspan="10" align="center"> <input type="submit" value="Crear"></td>
+	</tr>
+</table>
+</form>
+
+{% endblock %}

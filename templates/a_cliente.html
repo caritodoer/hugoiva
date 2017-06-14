@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1 align="center">{{ title }}</h1>
+<form method="POST" action=""> {% csrf_token %}
+<table align="center" border="1">
+	<tr>
+		<td> Razon Social </td>
+		<td> {{form.razon_social}}</td>
+	</tr>
+	<tr>
+		<td>Comercio</td>
+		<td>{{form.comercio}}</td>
+	</tr>
+	<tr>
+		<td>Domicilio</td>
+		<td>{{form.domicilio}}</td>
+	</tr>
+	<tr>
+		<td>Cuit</td>
+		<td>{{form.cuit}}</td>
+	</tr>
+	<tr>
+		<td colspan="2" align="center"> <input type="submit" value="Crear Cliente"></td>
+	</tr>
+</table>
+</form>
+
+{% endblock %}
