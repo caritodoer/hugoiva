@@ -4,6 +4,13 @@ from .forms import *
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 
 # Create your views here.
+def home(request):
+	queryset=EncabezadoLibro.objects.all().order_by('-id')
+	context = {
+		"object_list": queryset,
+		"title": "Últimos Libros Registrados"
+	}	
+	return render(request, "home.html", context)
 
 # Proveedor
 
@@ -89,16 +96,21 @@ def v_cliente(request, id=None):
 # Libro 
 
 def a_libro(request):
-	form = LibroForm(request.POST or None)
-	if form.is_valid():
-		instance = form.save(commit=False)
-		instance.save()
+	formE = ELibroForm(request.POST or None)
+	formD = DLibroForm(request.POST or None)
+	
+	if formE.is_valid()&formD.is_valid():
+		instanceE = formE.save(commit=False)
+		instanceE.save()
+		instanceD = formD.save(commit=False)
+		instanceD.save()
 		return HttpResponseRedirect(instance.get_absolute_url())
 	else:
-		print (form.errors)
+		print (formE.errors)
 	context = {
 		"title" : "Alta de Libro",
-		"form": form,
+		"formE": formE,
+		"formD": formD,
 	}
 	return render(request, "a_libro.html", context)
 

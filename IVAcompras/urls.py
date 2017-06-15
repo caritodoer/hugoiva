@@ -4,6 +4,7 @@ from . import views
 
 
 urlpatterns = [
+url(r'^$', views.home),
 # Proveedores
 
 url(r'^a_proveedor/$', views.a_proveedor),
@@ -22,6 +23,6 @@ url(r'^v_cliente/(?P<id>\d+)/$', views.v_cliente, name='d_cliente'),
 
 url(r'^a_libro/$', views.a_libro),
 url(r'^m_libro/(?P<id>\d+)/$', views.m_libro),
-url(r'^v_libro/(?P<id>\d+)/$', views.v_libro, name='d_libro'),
+url(r'^v_libro/(?P<id>\d+)/$', views.v_libro, name='d_dlibro'),
 
 ]

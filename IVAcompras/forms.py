@@ -21,13 +21,19 @@ class ClienteForm(forms.ModelForm):
 			"cuit",
 		]
 
-class LibroForm(forms.ModelForm):
+class ELibroForm(forms.ModelForm):
 	class Meta:
-		model = Libro
+		model = EncabezadoLibro
 		fields = [
 			"cliente",
 			"mes",
 			"anio",
+		] 
+
+class DLibroForm(forms.ModelForm):
+	class Meta:
+		model = DetalleLibro
+		fields = [
 			"fecha",
 			"nfactura",
 			"tipo",

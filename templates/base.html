@@ -1,18 +1,27 @@
+
 {% load staticfiles %}
 
 <!DOCTYPE html>
 <html >
   <head>
 	 <meta charset="UTF-8">
-	 <title></title>
-	 <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"> <!-- meta viewport para maparatos mobiles -->
+	 <title>Gestion de IVA</title>
+	 <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"> <!-- meta viewport para aparatos mobiles -->
 
-	 <link rel="stylesheet" href="/static/css/bootstrap.css">
+	<link rel="stylesheet" href="/static/css/bootstrap.css">
+	<link rel="stylesheet" href="/static/css/iva.css">
+
 	
   </head>
 	<body>
 		<!-- CABECERA -->
-		
+		<table>
+			<th>
+				<td><a href="/a_cliente">Alta Cliente</a></td>
+				<td><a href="/a_proveedor">Alta Proveedor</a></td>
+				<td><a href="/a_libro">Alta Libro</a></td>
+			</th>
+		</table>
 		<!-- CONTENIDO -->
 		<div class="container">
 			{% block content %}

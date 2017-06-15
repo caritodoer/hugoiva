@@ -17,7 +17,7 @@ class Proveedor(models.Model):
 		return reverse("iva:d_proveedor", kwargs={"id":self.id})
 
 	def __str__(self):
-		return ('%s - %s')%(self.razon_social, self.cuit)
+		return ('%s - %s - %s')%(self.razon_social, self.cuit, self.iva)
 
 class Cliente (models.Model):
 	razon_social = models.CharField("Titular / Razon Social", max_length=30)
@@ -31,9 +31,8 @@ class Cliente (models.Model):
 	def __str__(self):
 		return ('%s - %s')%(self.razon_social, self.cuit)
 
-class Libro(models.Model):
+class EncabezadoLibro(models.Model):
 	cliente = models.ForeignKey(Cliente)
-	#periodo = models.ForeignKey(Periodo)
 	mes_choices = (
 		('01', 'Enero'),
 		('02', 'Febrero'),
@@ -50,6 +49,12 @@ class Libro(models.Model):
 		)
 	mes = models.CharField(max_length=30, choices=mes_choices)
 	anio = models.CharField(max_length=4, default=2017)
+
+	def get_absolute_url(self):
+		return reverse("iva:d_elibro", kwargs={"id":self.id})
+
+class DetalleLibro(models.Model):
+	encabezado = models.ForeignKey(EncabezadoLibro)
 	fecha = models.DateField(auto_now=False)
 	nfactura = models.CharField(max_length=30)
 	tipo = models.CharField(max_length=2, default='C')
@@ -65,4 +70,4 @@ class Libro(models.Model):
 	ret_perc = models.IntegerField("Retenciones / Percepciones", default=0)
 
 	def get_absolute_url(self):
-		return reverse("iva:d_libro", kwargs={"id":self.id})
+		return reverse("iva:d_dlibro", kwargs={"id":self.id})

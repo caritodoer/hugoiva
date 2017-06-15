@@ -1,0 +1,33 @@
+input[type="text"]{
+	text-transform: uppercase;
+}
+@font-face {
+font-family: "Existence-Light";
+src: url("../fonts/Existence-Light.ttf");
+}
+
+h1{
+	font-family: Existence-Light;
+}
+
+@font-face {
+font-family: "Ubuntu-B";
+src: url("../fonts/ubuntu-font-family-0.83/Ubuntu-B.ttf");
+}
+
+h3{
+	font-family: Ubuntu-B;
+}
+
+@font-face {
+font-family: "Ubuntu-L";
+src: url("../fonts/ubuntu-font-family-0.83/Ubuntu-L.ttf");
+}
+
+body{
+	font-family: Ubuntu-L;
+}
+
+#menu {
+	margin-top: 20px;
+}
