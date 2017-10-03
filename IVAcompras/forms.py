@@ -1,50 +1,53 @@
 from django import forms
 from .models import *
 
-class ProveedorForm(forms.ModelForm):
+class CliProForm(forms.ModelForm):
 	class Meta:
-		model = Proveedor
+		model = CliPro
 		fields = [
-			"razon_social",
+			"nombre",
+			"direccion",
+			"telefono",
 			"cuit",
-			"nombre_fantasia",
+			"es_cliente",
+			"es_proveedor",
 			"iva",
+			"obs",
 		]
 
-class ClienteForm(forms.ModelForm):
+class EmpresaForm(forms.ModelForm):
 	class Meta:
-		model = Cliente
+		model = Empresa
 		fields = [
-			"razon_social",
-			"comercio",
-			"domicilio",
+			"nombre",
+			"propietario",
 			"cuit",
+			"localidad",
+			"direccion",
+			"telefono",
+			"directorio"
 		]
 
-class ELibroForm(forms.ModelForm):
+class LibroForm(forms.ModelForm):
 	class Meta:
-		model = EncabezadoLibro
+		model = Libro
 		fields = [
-			"cliente",
-			"mes",
-			"anio",
+			"empresa",
+			"tipo_libro",
 		] 
 
-class DLibroForm(forms.ModelForm):
+class DetalleForm(forms.ModelForm):
 	class Meta:
-		model = DetalleLibro
+		model = Detalle
 		fields = [
+			"libro",
 			"fecha",
+			"tipo_comprobante",
 			"nfactura",
-			"tipo",
-			"proveedor",
-			"ing_porcentaje",
-			"ing",
-			"cng",
-			"op_ex",
-			"iva_liq",
-			"iva_rec",
-			"total_fac",
-			"cred_fisc",
-			"ret_perc",
+			"cli_pro",
+			"alic",
+			"importe",
+			"ex_iva_insc",
+			"ex_19640",
+			"ret",
 		] 

@@ -3,34 +3,62 @@ from .models import *
 from .forms import *
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 
+"""
+vistas:
+- Empresas: AMVD
+- Cliente-Proveedor : AMVD
+- Libros : AMVD
+	- Listado de libros vta filtrados por empresa
+	- Listado de libros compra filtrados por empresa 
+y periodo
+- previsualizacion de la hoja del libro 
+"""
+
+
 # Create your views here.
 def home(request):
-	queryset=EncabezadoLibro.objects.all().order_by('-id')
+	querysetCliPro=CliPro.objects.all().order_by('-id')
+	list_emp=Empresa.objects.all().order_by('-id')
+	list_libros=Libro.objects.all()
+
+	#libros
+	lib_x_emp={}
+	for e in list_emp:
+		k=e
+		list_lxe=[] #listado de libros por empresa
+		for l in list_libros:
+			if e == l.empresa:
+				list_lxe.append(l)
+		lib_x_emp[k]=list_lxe	
+	print(lib_x_emp)
+
 	context = {
-		"object_list": queryset,
-		"title": "Últimos Libros Registrados"
+		"object_list_empresa": list_emp,
+		"object_list_clipro": querysetCliPro,
+		"object_dict_libro": lib_x_emp,
+		"title": "Sistema de IVA Ventas / Compras",
 	}	
 	return render(request, "home.html", context)
 
-# Proveedor
-
-def a_proveedor(request):
-	form = ProveedorForm(request.POST or None)
+# EMPRESA
+def a_empresa(request):
+	form = EmpresaForm(request.POST or None)
 	if form.is_valid():
 		instance = form.save(commit=False)
 		instance.save()
+
+		
 		return HttpResponseRedirect(instance.get_absolute_url())
 	else:
 		print (form.errors)
 	context = {
-		"title" : "Alta de Proveedor",
+		"title" : "Nueva Empresa",
 		"form": form,
 	}
-	return render(request, "a_proveedor.html", context)
-
-def m_proveedor(request, id=None):
-	instance = get_object_or_404(Proveedor, id=id)
-	form = ProveedorForm(request.POST or None, instance=instance)
+	return render(request, "a_empresa.html", context)
+def m_empresa(request, id=None):
+	instance = get_object_or_404(Empresa, id=id)
+	form = EmpresaForm(request.POST or None, instance=instance)
 	if form.is_valid():
 		instance = form.save(commit=False)
 		instance.save()
@@ -38,24 +66,26 @@ def m_proveedor(request, id=None):
 	else:
 		print (form.errors)
 	context = {
-		"title" : "Modificar Proveedor",
+		"title" : "Modificar Empresa",
 		"instance" : instance,
 		"form" : form,
 	}
-	return render(request, "a_proveedor.html", context)
-
-def v_proveedor(request, id=None):
-	instance = get_object_or_404(Proveedor, id=id)
+	return render(request, "a_empresa.html", context)
+def v_empresa(request, id=None):
+	instance = get_object_or_404(Empresa, id=id)
 	context = {
 		"instance" : instance,
-		"title": "Detalle de Proveedor",
+		"title": "Detalle de Empresa",
 	}
-	return render(request, "v_proveedor.html", context)
+	return render(request, "v_empresa.html", context)
+def d_empresa(request, id=None):
+	instance = get_object_or_404(Empresa, id=id)
+	instance.delete()
+	return redirect("iva:home")
 
-# Cliente
-
-def a_cliente(request):
-	form = ClienteForm(request.POST or None)
+# Cliente/Proveedor
+def a_cli_pro(request):
+	form = CliProForm(request.POST or None)
 	if form.is_valid():
 		instance = form.save(commit=False)
 		instance.save()
@@ -63,14 +93,13 @@ def a_cliente(request):
 	else:
 		print (form.errors)
 	context = {
-		"title" : "Alta de Cliente",
+		"title" : "Alta de Cliente/Proveedor",
 		"form": form,
 	}
-	return render(request, "a_cliente.html", context)
-
-def m_cliente(request, id=None):
-	instance = get_object_or_404(Cliente, id=id)
-	form = ClienteForm(request.POST or None, instance=instance)
+	return render(request, "a_cli_pro.html", context)
+def m_cli_pro(request, id=None):
+	instance = get_object_or_404(CliPro, id=id)
+	form = CliProForm(request.POST or None, instance=instance)
 	if form.is_valid():
 		instance = form.save(commit=False)
 		instance.save()
@@ -78,39 +107,38 @@ def m_cliente(request, id=None):
 	else:
 		print (form.errors)
 	context = {
-		"title" : "Modificar Cliente",
+		"title" : "Modificar Cliente/Proveedor",
 		"instance" : instance,
 		"form" : form,
 	}
-	return render(request, "a_cliente.html", context)
-
-
-def v_cliente(request, id=None):
-	instance = get_object_or_404(Cliente, id=id)
+	return render(request, "a_cli_pro.html", context)
+def v_cli_pro(request, id=None):
+	instance = get_object_or_404(CliPro, id=id)
 	context = {
 		"instance" : instance,
-		"title": "Detalle de Cliente",
+		"title": "Detalle de Cliente/Proveedor",
 	}
-	return render(request, "v_cliente.html", context)
+	return render(request, "v_cli_pro.html", context)
+def d_cli_pro(request, id=None):
+	instance = get_object_or_404(CliPro, id=id)
+	instance.delete()
+	return redirect("iva:home")
 
 # Libro 
 
 def a_libro(request):
-	formE = ELibroForm(request.POST or None)
-	formD = DLibroForm(request.POST or None)
+	form = LibroForm(request.POST or None)
 	
-	if formE.is_valid()&formD.is_valid():
-		instanceE = formE.save(commit=False)
-		instanceE.save()
-		instanceD = formD.save(commit=False)
-		instanceD.save()
+	if form.is_valid():
+		instance = form.save(commit=False)
+		instance.save()
 		return HttpResponseRedirect(instance.get_absolute_url())
 	else:
-		print (formE.errors)
+		print (form.errors)
 	context = {
 		"title" : "Alta de Libro",
-		"formE": formE,
-		"formD": formD,
+		"form": form,
+
 	}
 	return render(request, "a_libro.html", context)
 
@@ -132,8 +160,84 @@ def m_libro(request, id=None):
 
 def v_libro(request, id=None):
 	instance = get_object_or_404(Libro, id=id)
+	form = DetalleForm(request.POST or None)
+	if form.is_valid():
+		instance = form.save(commit=False)
+		instance.save()
+		return HttpResponseRedirect(instance.get_absolute_url())
+	else:
+		print (form.errors)
 	context = {
+		"form": form,
 		"instance" : instance,
 		"title": "Detalle de Libro",
 	}
 	return render(request, "v_libro.html", context)
+
+def l_libro(request):
+	queryset = Libro.objects.all().order_by('id')
+	context = {
+		"object_list": queryset,
+		"title": "Listado de Libros"
+	}
+	return render(request, "l_libro.html", context)
+
+def d_libro(request, id=None):
+	instance = get_object_or_404(Libro, id=id)
+	instance.delete()
+	return redirect("iva:home")
+
+# Detalle 
+
+def a_detalle(request):
+	form = DetalleForm(request.POST or None)
+	
+	if form.is_valid():
+		instance = form.save(commit=False)
+		instance.save()
+		return HttpResponseRedirect(instance.get_absolute_url())
+	else:
+		print (form.errors)
+	context = {
+		"title" : "Alta de Detalle",
+		"form": form,
+
+	}
+	return render(request, "a_detalle.html", context)
+
+def m_detalle(request, id=None):
+	instance = get_object_or_404(Detalle, id=id)
+	form = DetalleForm(request.POST or None, instance=instance)
+	if form.is_valid():
+		instance = form.save(commit=False)
+		instance.save()
+		return HttpResponseRedirect(instance.get_absolute_url())
+	else:
+		print (form.errors)
+	context = {
+		"title" : "Modificar Detalle",
+		"instance" : instance,
+		"form" : form,
+	}
+	return render(request, "a_detalle.html", context)
+
+def v_detalle(request, id=None):
+	instance = get_object_or_404(Detalle, id=id)
+	context = {
+		"instance" : instance,
+		"title": "Detalle de Detalle",
+	}
+	return render(request, "v_detalle.html", context)
+
+def l_detalle(request):
+	queryset = Detalle.objects.all().order_by('id')
+	context = {
+		"object_list": queryset,
+		"title": "Listado de Detalles"
+	}
+	return render(request, "l_detalle.html", context)
+
+def d_detalle(request, id=None):
+	instance = get_object_or_404(Detalle, id=id)
+	instance.delete()
+	return redirect("iva:home")

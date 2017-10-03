@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row">
+	<div class="col-md-10 col-md-offset-1">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">{{ title }}</h3>
+			</div>
+			<div class="panel-body">
+
+				<dl class="dl-horizontal">
+					<dt>Nombre</dt>
+					<dd>{{ instance.nombre }}</dd>
+					<dt>Propietario</dt>
+					<dd>{{ instance.propietario }}</dd>
+					<dt>CUIT</dt>
+					<dd>{{ instance.cuit }}</dd>
+					<dt>Localidad</dt>
+					<dd>{{ instance.localidad }}</dd>
+					<dt>Direccion</dt>
+					<dd>{{ instance.direccion }}</dd>
+					<dt>Telefono</dt>
+					<dd>{{ instance.telefono }}</dd>
+					<dt>Directorio</dt>
+					<dd>{{ instance.directorio }} </dd>
+				</dl>
+
+			</div>
+			<div class="panel-footer">
+				<ul class="list-inline">
+					<li>
+						<a href="/../../m_empresa/{{ instance.id }}">
+					Modificar<span class="glyphicon glyphicon-pencil"></span>
+						</a>
+					</li>
+					<li>
+						<a href="../../d_empresa/{{ instance.id }}">
+					Eliminar<span class="glyphicon glyphicon-remove"></span>
+						</a>
+					</li>
+				</ul>
+			
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

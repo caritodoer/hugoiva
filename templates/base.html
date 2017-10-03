@@ -1,4 +1,3 @@
-
 {% load staticfiles %}
 
 <!DOCTYPE html>
@@ -15,13 +14,9 @@
   </head>
 	<body>
 		<!-- CABECERA -->
-		<table>
-			<th>
-				<td><a href="/a_cliente">Alta Cliente</a></td>
-				<td><a href="/a_proveedor">Alta Proveedor</a></td>
-				<td><a href="/a_libro">Alta Libro</a></td>
-			</th>
-		</table>
+		<header>
+		{% include 'includes/menu.html' %}
+		</header>
 		<!-- CONTENIDO -->
 		<div class="container">
 			{% block content %}
@@ -30,7 +25,7 @@
 		</div>
 		<!-- PIE -->
 		<footer>
-			<div class="container">
+			<div class="container pie">
 				<p align="center">Copyright (c) 2017</p>
 			</div>
 		</footer>
