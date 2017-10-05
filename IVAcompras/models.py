@@ -53,6 +53,9 @@ class Libro(models.Model):
 	def __str__(self):
 		return ('%s - %s')%(self.empresa, self.tipo_libro)
 
+	class Meta:
+		unique_together = ("empresa", "tipo_libro")
+
 class Detalle(models.Model):
 	libro = models.ForeignKey(Libro)
 	fecha = models.DateField(auto_now=False)
@@ -76,4 +79,4 @@ class Detalle(models.Model):
 		return reverse("iva:v_detalle", kwargs={"id":self.id})
 
 	def __str__(self):
-		return ('%s - %s - %s - %s - %s')%(self.libro, self.empresa, self.fecha, self.nfactura, self.importe, self.cli_pro)
+		return ('%s - %s - %s - %s - %s')%(self.libro, self.fecha, self.nfactura, self.importe, self.cli_pro)

@@ -13,9 +13,9 @@ urlpatterns = [
 	# empresa
 
 	url(r'^a_empresa/$', views.a_empresa, name='a_empresa'),
-	url(r'^m_empresa/(?P<id>\d+)/$', views.m_empresa),
+	url(r'^m_empresa/(?P<id>\d+)/$', views.m_empresa, name='m_empresa'),
 	url(r'^v_empresa/(?P<id>\d+)/$', views.v_empresa, name='v_empresa'),
-	url(r'^d_empresa/(?P<id>\d+)/$', views.d_empresa),
+	url(r'^d_empresa/(?P<id>\d+)/$', views.d_empresa, name='d_empresa'),
 
 	# cliente_proveedor
 
@@ -26,7 +26,7 @@ urlpatterns = [
 
 	# Libro
 
-	url(r'^a_libro/$', views.a_libro, name='a_libro'),
+	url(r'^a_libro/(?P<k>[^/]+)/(?P<v>[^/]+)/$', views.a_libro, name='a_libro'),
 	url(r'^m_libro/(?P<id>\d+)/$', views.m_libro),
 	url(r'^v_libro/(?P<id>\d+)/$', views.v_libro, name='v_libro'),
 	url(r'^d_libro/(?P<id>\d+)/$', views.d_libro),

@@ -25,10 +25,13 @@ def home(request):
 	lib_x_emp={}
 	for e in list_emp:
 		k=e
-		list_lxe=[] #listado de libros por empresa
+		list_lxe=['X', 'X'] #listado de libros por empresa
 		for l in list_libros:
 			if e == l.empresa:
-				list_lxe.append(l)
+				if l.tipo_libro == 'V':
+					list_lxe[0]=l
+				if l.tipo_libro == 'C':
+					list_lxe[1]=l
 		lib_x_emp[k]=list_lxe	
 	print(lib_x_emp)
 
@@ -55,7 +58,7 @@ def a_empresa(request):
 		"title" : "Nueva Empresa",
 		"form": form,
 	}
-	return render(request, "a_empresa.html", context)
+	return render(request, "altas.html", context)
 def m_empresa(request, id=None):
 	instance = get_object_or_404(Empresa, id=id)
 	form = EmpresaForm(request.POST or None, instance=instance)
@@ -70,7 +73,7 @@ def m_empresa(request, id=None):
 		"instance" : instance,
 		"form" : form,
 	}
-	return render(request, "a_empresa.html", context)
+	return render(request, "altas.html", context)
 def v_empresa(request, id=None):
 	instance = get_object_or_404(Empresa, id=id)
 	context = {
@@ -96,7 +99,7 @@ def a_cli_pro(request):
 		"title" : "Alta de Cliente/Proveedor",
 		"form": form,
 	}
-	return render(request, "a_cli_pro.html", context)
+	return render(request, "altas.html", context)
 def m_cli_pro(request, id=None):
 	instance = get_object_or_404(CliPro, id=id)
 	form = CliProForm(request.POST or None, instance=instance)
@@ -111,7 +114,7 @@ def m_cli_pro(request, id=None):
 		"instance" : instance,
 		"form" : form,
 	}
-	return render(request, "a_cli_pro.html", context)
+	return render(request, "altas.html", context)
 def v_cli_pro(request, id=None):
 	instance = get_object_or_404(CliPro, id=id)
 	context = {
@@ -126,21 +129,14 @@ def d_cli_pro(request, id=None):
 
 # Libro 
 
-def a_libro(request):
-	form = LibroForm(request.POST or None)
-	
-	if form.is_valid():
-		instance = form.save(commit=False)
-		instance.save()
-		return HttpResponseRedirect(instance.get_absolute_url())
-	else:
-		print (form.errors)
-	context = {
-		"title" : "Alta de Libro",
-		"form": form,
-
-	}
-	return render(request, "a_libro.html", context)
+def a_libro(request, k=None, v=None):
+	empresa = get_object_or_404(Empresa, id=k)
+	tipo_libro = v
+	print(empresa)
+	print(tipo_libro)
+	instance = Libro(empresa=empresa, tipo_libro=tipo_libro)
+	instance.save()
+	return HttpResponseRedirect(instance.get_absolute_url())
 
 def m_libro(request, id=None):
 	instance = get_object_or_404(Libro, id=id)
@@ -156,19 +152,16 @@ def m_libro(request, id=None):
 		"instance" : instance,
 		"form" : form,
 	}
-	return render(request, "a_libro.html", context)
+	return render(request, "altas.html", context)
 
 def v_libro(request, id=None):
 	instance = get_object_or_404(Libro, id=id)
-	form = DetalleForm(request.POST or None)
-	if form.is_valid():
-		instance = form.save(commit=False)
-		instance.save()
-		return HttpResponseRedirect(instance.get_absolute_url())
-	else:
-		print (form.errors)
+	list_detalle = Detalle.objects.all().order_by('fecha').filter(libro=instance)
+	print(list_detalle)
+
 	context = {
-		"form": form,
+		
+		
 		"instance" : instance,
 		"title": "Detalle de Libro",
 	}
@@ -203,7 +196,7 @@ def a_detalle(request):
 		"form": form,
 
 	}
-	return render(request, "a_detalle.html", context)
+	return render(request, "altas.html", context)
 
 def m_detalle(request, id=None):
 	instance = get_object_or_404(Detalle, id=id)
@@ -219,7 +212,7 @@ def m_detalle(request, id=None):
 		"instance" : instance,
 		"form" : form,
 	}
-	return render(request, "a_detalle.html", context)
+	return render(request, "altas.html", context)
 
 def v_detalle(request, id=None):
 	instance = get_object_or_404(Detalle, id=id)
