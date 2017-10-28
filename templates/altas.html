@@ -1,19 +1,66 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
+
 <div class="row">
 	<div class="col-md-8 col-md-offset-2">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h3 class="panel-title">{{ title }}</h3>
-			</div>
-			<div class="panel-body">
+				<h1>{{ title }}</h1>
 				{% crispy form form.helper %}
-			</div>
-		</div>
+		<div align="left">
+			<a class="btn btn-default btn-md" role="button" href="{{ url }}"><span class="glyphicon glyphicon-chevron-left"></span>  Volver</a>
+        </div>
 	</div>
 </div>
+<!-- modal -->
+<div class="modal fade" id="acpmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Nuevo Cliente/Proveedor</h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary">Guardar</button><p>: que cuando se guarde esa info se cargue en el select automaticamente. Darle funcion de guardar a este funcion con js? ver que tebgo dos forms, ver como lo hicieron los chicos en el de diagnostico</p>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- fin modal -->
+
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#esteboton").click(function(){
+        $(".modal-body").load("{% url 'iva:a_cp_modal' %}");
+    });
+// 	document.getElementById("esteboton").onclick = function (e) {
+//     var loadurl = $(e.relatedTarget).data('load-url');
+//     document.getElementById("esteboton").innerHTML = {% url 'iva:a_cp_modal' %};
+//     $(this).find('.modal-body').load(loadurl);
+// // 		window.open({% url 'iva:a_cp_modal' %}, "", "width=600,height=600,toolbar=yes,scrollbars=yes")
+// // 		// myFunction()
+// 	};
+
+// 	// function myFunction() {
+// 	//     document.getElementById("esteboton").innerHTML = "YOU CLICKED ME!";
+// 	// }
 
 
+// $('#acpmodal').on('show.bs.modal', function (e) {
+//     var loadurl = $(e.relatedTarget).data('load-url');
+//     $(this).find('.modal-body').load(loadurl);
+// });
 
+// $('#acpmodal').on('show.bs.modal', function (e) {
+//     var loadurl = e.relatedTarget.dataset.loadUrl;
+//     $(this).find('.modal-body').load(loadurl);
+// });
+
+});
+</script> 
 {% endblock %}

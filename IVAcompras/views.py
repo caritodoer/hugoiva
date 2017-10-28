@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import *
 from .forms import *
 from django.http import HttpResponseRedirect, HttpResponse, Http404
-
+from django.forms.models import model_to_dict
 """
 vistas:
 - Empresas: AMVD
@@ -39,11 +39,19 @@ def home(request):
 		"object_list_empresa": list_emp,
 		"object_list_clipro": querysetCliPro,
 		"object_dict_libro": lib_x_emp,
-		"title": "Sistema de IVA Ventas / Compras",
+		"title": "Libros IVA Ventas / Compras",
 	}	
 	return render(request, "home.html", context)
 
 # EMPRESA
+def l_empresa(request):
+	queryset = Empresa.objects.all().order_by('id')
+	
+	context = {
+		"object_list": queryset,
+		"title": "Empresas"
+	}
+	return render(request, "l_empresa.html", context)
 def a_empresa(request):
 	form = EmpresaForm(request.POST or None)
 	if form.is_valid():
@@ -55,6 +63,7 @@ def a_empresa(request):
 	else:
 		print (form.errors)
 	context = {
+		"url": "/l_empresa",
 		"title" : "Nueva Empresa",
 		"form": form,
 	}
@@ -86,7 +95,29 @@ def d_empresa(request, id=None):
 	instance.delete()
 	return redirect("iva:home")
 
+def a_cp_modal(request):
+	form = CliProForm(request.POST or None)
+	if form.is_valid():
+		instance = form.save(commit=False)
+		instance.save()
+		return HttpResponseRedirect(instance.get_absolute_url())
+	else:
+		print (form.errors)
+	context = {
+		"title" : "Alta de Cliente/Proveedor",
+		"form": form,
+	}
+	return render(request, "a_cp_modal.html", context)
+
 # Cliente/Proveedor
+def l_cli_pro(request):
+	queryset = CliPro.objects.all().order_by('id')
+	
+	context = {
+		"object_list": queryset,
+		"title": "Clientes-Proveedores"
+	}
+	return render(request, "l_cli_pro.html", context)
 def a_cli_pro(request):
 	form = CliProForm(request.POST or None)
 	if form.is_valid():
@@ -96,6 +127,7 @@ def a_cli_pro(request):
 	else:
 		print (form.errors)
 	context = {
+		"url": "/l_cli_pro",
 		"title" : "Alta de Cliente/Proveedor",
 		"form": form,
 	}
@@ -137,7 +169,6 @@ def a_libro(request, k=None, v=None):
 	instance = Libro(empresa=empresa, tipo_libro=tipo_libro)
 	instance.save()
 	return HttpResponseRedirect(instance.get_absolute_url())
-
 def m_libro(request, id=None):
 	instance = get_object_or_404(Libro, id=id)
 	form = LibroForm(request.POST or None, instance=instance)
@@ -153,28 +184,48 @@ def m_libro(request, id=None):
 		"form" : form,
 	}
 	return render(request, "altas.html", context)
-
 def v_libro(request, id=None):
 	instance = get_object_or_404(Libro, id=id)
 	list_detalle = Detalle.objects.all().order_by('fecha').filter(libro=instance)
-	print(list_detalle)
-
+	imp_x_det={}
+	for d in list_detalle:
+		importe=d.gravado+d.no_gravado+d.iva21
+		imp_x_det[d.id]=importe
+	print(imp_x_det)
+	# print(list_detalle)
 	context = {
-		
-		
+		"list_detalle": list_detalle,
+		"imp_x_det": imp_x_det,
 		"instance" : instance,
-		"title": "Detalle de Libro",
+		"title": "Libro",
 	}
 	return render(request, "v_libro.html", context)
-
 def l_libro(request):
-	queryset = Libro.objects.all().order_by('id')
+	
+	list_emp=Empresa.objects.all().order_by('-id')
+	list_libros=Libro.objects.all()
+
+	#libros
+	lib_x_emp={}
+	for e in list_emp:
+		k=e
+		list_lxe=['X', 'X'] #listado de libros por empresa
+		for l in list_libros:
+			if e == l.empresa:
+				if l.tipo_libro == 'V':
+					list_lxe[0]=l
+				if l.tipo_libro == 'C':
+					list_lxe[1]=l
+		lib_x_emp[k]=list_lxe	
+	print(lib_x_emp)
+
 	context = {
-		"object_list": queryset,
+		"object_list_empresa": list_emp,
+		"object_dict_libro": lib_x_emp,
+
 		"title": "Listado de Libros"
 	}
 	return render(request, "l_libro.html", context)
-
 def d_libro(request, id=None):
 	instance = get_object_or_404(Libro, id=id)
 	instance.delete()
@@ -182,8 +233,11 @@ def d_libro(request, id=None):
 
 # Detalle 
 
-def a_detalle(request):
-	form = DetalleForm(request.POST or None)
+def a_detalle(request, l=None):
+	libro = get_object_or_404(Libro, id=l)
+	instance = Detalle(libro=libro)
+	#instance.save()
+	form = DetalleForm(request.POST or None, instance=instance)
 	
 	if form.is_valid():
 		instance = form.save(commit=False)
@@ -192,12 +246,12 @@ def a_detalle(request):
 	else:
 		print (form.errors)
 	context = {
+		"libro": libro,
 		"title" : "Alta de Detalle",
 		"form": form,
 
 	}
 	return render(request, "altas.html", context)
-
 def m_detalle(request, id=None):
 	instance = get_object_or_404(Detalle, id=id)
 	form = DetalleForm(request.POST or None, instance=instance)
@@ -213,15 +267,15 @@ def m_detalle(request, id=None):
 		"form" : form,
 	}
 	return render(request, "altas.html", context)
-
 def v_detalle(request, id=None):
 	instance = get_object_or_404(Detalle, id=id)
+	objeto = DetalleForm(data=model_to_dict(Detalle.objects.get(id=id), exclude=["libro"]))
 	context = {
 		"instance" : instance,
 		"title": "Detalle de Detalle",
+		"objeto": objeto,
 	}
 	return render(request, "v_detalle.html", context)
-
 def l_detalle(request):
 	queryset = Detalle.objects.all().order_by('id')
 	context = {
@@ -229,7 +283,6 @@ def l_detalle(request):
 		"title": "Listado de Detalles"
 	}
 	return render(request, "l_detalle.html", context)
-
 def d_detalle(request, id=None):
 	instance = get_object_or_404(Detalle, id=id)
 	instance.delete()

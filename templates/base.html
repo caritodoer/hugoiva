@@ -9,6 +9,7 @@
 
 	<link rel="stylesheet" href="/static/css/bootstrap.css">
 	<link rel="stylesheet" href="/static/css/iva.css">
+	<link rel="stylesheet" href="/static/css/font-awesome.css">
 
 	
   </head>
@@ -18,20 +19,28 @@
 		{% include 'includes/menu.html' %}
 		</header>
 		<!-- CONTENIDO -->
+		{% include 'includes/aside.html' %}
 		<div class="container">
 			{% block content %}
 			{% endblock %}
 		
 		</div>
 		<!-- PIE -->
-		<footer>
+		<!-- <footer>
 			<div class="container pie">
 				<p align="center">Copyright (c) 2017</p>
 			</div>
-		</footer>
+		</footer> -->
 		<!-- JAVASCRIPT -->
 		<script src="/static/js/jquery.js"></script>
 		<script src="/static/js/bootstrap.js"></script>
+		<script type="text/javascript">
+			$("#leftside-navigation .sub-menu > a").click(function(e) {
+				$("#leftside-navigation ul ul").slideUp(), $(this).next().is(":visible") || $(this).next().slideDown(),
+				e.stopPropagation()
+			})
+		</script>
+
 		{% block javascript %} 
 		{% endblock %}
 	</body>

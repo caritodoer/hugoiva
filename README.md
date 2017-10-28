@@ -1,26 +1,30 @@
 # hugoiva
 
-#####################
-en home.html la tabla de los libros tiene que mostrar
-	cliente			periodo
-con un link en el periodo que redirige a la carga de ese cliente para ese periodo.
-se muestra todo lo cargado en ese libro y se permite seguir cargando items o eliminar items (como un modificar)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#####################
-dos models seprados:
+* paginacion en tablas (hasta 20 registros)
+* busqueda/filtro por encima de tablas
+* pdf ---> ver formato de 
+					- informes DGR (HUGO)
+					- hoja libros
+* ABM usuarios + login/logout + permisos desde admin de django
 
-encabezado:
--periodo
--cliente
+en form detalle: 
+# boton agreagr cliente que abra un modal--falta guardar
+# botones
+	- guardar
+	- guardar y cargar otro
 
-detalle factura
-- fecha
--factura n°
--tipo
--proveedor
--cuit
-...
--total facturado
+importaciones y exportaciones a exell
+
+
+
+
+
+
+
+
+
 
 ####################
 templates:

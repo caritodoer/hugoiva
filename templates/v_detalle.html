@@ -2,7 +2,7 @@
 {% block content %}
 
 <div class="row">
-	<div class="col-md-10 col-md-offset-1">
+	<div class="col-md-6 col-md-offset-3">
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h3 class="panel-title">{{ title }}</h3>
@@ -10,28 +10,21 @@
 			<div class="panel-body">
 
 				<dl class="dl-horizontal">
-					<dt>empresa</dt>
+					<dt>Empresa</dt>
 					<dd>{{ instance.libro.empresa }}</dd>
-					<dt>tipo_libro</dt>
-					<dd>{{ instance.libro.tipo_libro }}</dd>
-					<dt>fecha</dt>
-					<dd>{{ instance.fecha }}</dd>
-					<dt>tipo_comprobante</dt>
-					<dd>{{ instance.tipo_comprobante }}</dd>
-					<dt>nfactura</dt>
-					<dd>{{ instance.nfactura }} </dd>
-					<dt>cli_pro</dt>
-					<dd>{{ instance.cli_pro }} </dd>
-					<dt>alic</dt>
-					<dd>{{ instance.alic }} </dd>
-					<dt>importe</dt>
-					<dd>{{ instance.importe }} </dd>
-					<dt>ex_iva_insc</dt>
-					<dd>{{ instance.ex_iva_insc }} </dd>
-					<dt>ex_19640</dt>
-					<dd>{{ instance.ex_19640 }} </dd>
-					<dt>ret</dt>
-					<dd>{{ instance.ret }} </dd>
+					<dt>Libro</dt>
+					{% if instance.libro.tipo_libro == 'C' %}
+						<dd>Compras</dd>
+					{% else %}
+						<dd>Ventas</dd>
+					{% endif %}
+					<br>
+					
+				{% for field in objeto %}
+					{% if field.data != None %}
+					<dt>{{ field.label }}:</dt><dd>{{field.data}}</dd>
+					{% endif %}
+				{% endfor %}
 				</dl>
 
 			</div>
@@ -51,6 +44,9 @@
 			
 			</div>
 		</div>
+		<div align="left">
+			<a class="btn btn-default btn-md" role="button" href="{% url 'iva:v_libro' id=instance.libro.id %}"><span class="glyphicon glyphicon-chevron-left"></span>  Volver</a>
+        </div>
 	</div>
 </div>
 

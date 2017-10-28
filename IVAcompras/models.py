@@ -1,5 +1,7 @@
 from django.db import models
 from django.core.urlresolvers import reverse 
+from django.core.validators import MinValueValidator
+from decimal import Decimal
 
 class Empresa(models.Model):
 	nombre = models.CharField(max_length=50)
@@ -13,14 +15,17 @@ class Empresa(models.Model):
 	def get_absolute_url(self):
 		return reverse("iva:v_empresa", kwargs={"id":self.id})
 
+	def go_home(self):
+		return reverse("iva:home")
+
 	def __str__(self):
 		return ('%s - %s')%(self.nombre, self.cuit)
 
 class CliPro(models.Model):
-	nombre = models.CharField(max_length=30)
+	nombre = models.CharField("Razón Social", max_length=30)
 	direccion = models.CharField(max_length=30)
 	telefono = models.CharField(max_length=30, null=True, blank=True)
-	cuit = models.CharField("CUIT", max_length=30)
+	cuit = models.CharField("C.U.I.T.", max_length=30)
 	es_cliente = models.BooleanField(default=False)
 	es_proveedor = models.BooleanField(default=False)
 	iva_choices = (
@@ -30,7 +35,7 @@ class CliPro(models.Model):
 		('M', 'Monotributo'),
 		('E', 'Exento'),
 		)
-	iva = models.CharField("Categoría de IVA", max_length=30, choices=iva_choices)
+	iva = models.CharField("Tipo I.V.A.", max_length=30, choices=iva_choices)
 	obs = models.TextField("Observaciones", null=True, blank=True)
 
 	def get_absolute_url(self):
@@ -58,25 +63,37 @@ class Libro(models.Model):
 
 class Detalle(models.Model):
 	libro = models.ForeignKey(Libro)
-	fecha = models.DateField(auto_now=False)
+	fecha = models.DateField(auto_now=False, null=True)
 	tipo_comprobante_choices = (
 		('F', 'Factura'),
 		('ND', 'Nota de Débito'),
 		('NC', 'Nota de Crédito'),
 		('R', 'Recibo'),
 		)
-	tipo_comprobante = models.CharField("Tipo de comprobante", max_length=2, choices= tipo_comprobante_choices)
-	nfactura = models.CharField(max_length=30)
-	cli_pro = models.ForeignKey(CliPro)
-	alic = models.IntegerField("Alic.", default=0)
-	importe = models.IntegerField("Importe Neto")
+	tipo_comprobante = models.CharField("Tipo de comprobante", max_length=2, choices= tipo_comprobante_choices, null=True)
+	letra = models.CharField("Letra", max_length=1, null=True)
+	sucursal = models.CharField("Suc", max_length=3, null=True)
+	nfactura = models.CharField("N°", max_length=30, null=True)
+	cli_pro = models.ForeignKey(CliPro, null=True)
 	
-	ex_iva_insc = models.IntegerField("Exento IVA Insc.", default=0)
-	ex_19640 = models.IntegerField("Exento 19640 IVA No Insc", default=0)
-	ret = models.IntegerField("Retención Internos", default=0)
+	gravado = models.DecimalField("Gravado", default=0, null=True, decimal_places=2, max_digits=6, validators=[MinValueValidator(Decimal('0.00'))])
+	no_gravado = models.DecimalField("No Gravado", default=0, null=True, decimal_places=2, max_digits=6, validators=[MinValueValidator(Decimal('0.00'))])
+	iva21 = models.DecimalField("I.V.A. 21%", default=0, null=True, decimal_places=2, max_digits=6, validators=[MinValueValidator(Decimal('0.00'))])
+	iva105= models.DecimalField("I.V.A. 10,5%", default=0, null=True, decimal_places=2, max_digits=6, validators=[MinValueValidator(Decimal('0.00'))])
+	iva_otros= models.DecimalField("Otros I.V.A.", default=0, null=True, decimal_places=2, max_digits=6, validators=[MinValueValidator(Decimal('0.00'))])
+	rg2126= models.DecimalField("R.G. 2126", default=0, null=True, decimal_places=2, max_digits=6, validators=[MinValueValidator(Decimal('0.00'))])
+	ret_IVA = models.DecimalField("Ret. I.V.A.", default=0, null=True, decimal_places=2, max_digits=6, validators=[MinValueValidator(Decimal('0.00'))])
+	ret_iibb= models.DecimalField("Ret. IIBB", default=0, null=True, decimal_places=2, max_digits=6, validators=[MinValueValidator(Decimal('0.00'))])
+	imp_int= models.DecimalField("Imp. Internos", default=0, null=True, decimal_places=2, max_digits=6, validators=[MinValueValidator(Decimal('0.00'))])
+	otros= models.DecimalField("Otros", default=0, null=True, decimal_places=2, max_digits=6, validators=[MinValueValidator(Decimal('0.00'))])
+
 	
 	def get_absolute_url(self):
 		return reverse("iva:v_detalle", kwargs={"id":self.id})
 
 	def __str__(self):
-		return ('%s - %s - %s - %s - %s')%(self.libro, self.fecha, self.nfactura, self.importe, self.cli_pro)
+		return ('%s - %s - %s - %s')%(self.libro, self.fecha, self.nfactura, self.cli_pro)
+
+	class Meta:
+		unique_together = ("libro", "tipo_comprobante", "nfactura")
+

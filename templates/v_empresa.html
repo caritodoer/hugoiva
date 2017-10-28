@@ -2,16 +2,10 @@
 {% block content %}
 
 <div class="row">
-	<div class="col-md-10 col-md-offset-1">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h3 class="panel-title">{{ title }}</h3>
-			</div>
-			<div class="panel-body">
-
-				<dl class="dl-horizontal">
-					<dt>Nombre</dt>
-					<dd>{{ instance.nombre }}</dd>
+	<div class="col-md-8 col-md-offset-2">
+		<h1>{{instance.nombre}}</h1>
+			<dl class="dl-horizontal">
+					
 					<dt>Propietario</dt>
 					<dd>{{ instance.propietario }}</dd>
 					<dt>CUIT</dt>
@@ -26,24 +20,26 @@
 					<dd>{{ instance.directorio }} </dd>
 				</dl>
 
-			</div>
-			<div class="panel-footer">
+			<div align="left">
 				<ul class="list-inline">
 					<li>
-						<a href="/../../m_empresa/{{ instance.id }}">
+			<a class="btn btn-default btn-md" role="button" href="{% url 'iva:home' %}"><span class="glyphicon glyphicon-chevron-left"></span>  Volver</a>
+					</li>
+					<li>
+						<a class="btn btn-default btn-md" role="button" href="{% url 'iva:m_empresa' id=instance.id %}">
 					Modificar<span class="glyphicon glyphicon-pencil"></span>
 						</a>
 					</li>
 					<li>
-						<a href="../../d_empresa/{{ instance.id }}">
+						<a class="btn btn-danger btn-md" role="button" href="../../d_empresa/{{ instance.id }}">
 					Eliminar<span class="glyphicon glyphicon-remove"></span>
 						</a>
 					</li>
 				</ul>
 			
 			</div>
-		</div>
+        </div>
 	</div>
-</div>
+
 
 {% endblock %}

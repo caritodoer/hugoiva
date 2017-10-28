@@ -1,7 +1,7 @@
 from django import forms
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout
-from crispy_forms.bootstrap import StrictButton
+from crispy_forms.layout import Submit, Layout, Fieldset, Div, Field, ButtonHolder
+from crispy_forms.bootstrap import StrictButton, FieldWithButtons, PrependedText, PrependedAppendedText, FormActions
 from .models import *
 
 class CliProForm(forms.ModelForm):
@@ -31,7 +31,6 @@ class CliProForm(forms.ModelForm):
 
 		self.helper.add_input(Submit('submit', 'Enviar', css_class='btn-primary'))
 	
-
 class EmpresaForm(forms.ModelForm):
 	class Meta:
 		model = Empresa
@@ -58,8 +57,6 @@ class EmpresaForm(forms.ModelForm):
 
 		self.helper.add_input(Submit('submit', 'Enviar', css_class='btn-primary'))
 		#self.helper.layout.append(Submit('save', 'save'))
-
-
 
 class LibroForm(forms.ModelForm):
 	class Meta:
@@ -90,13 +87,20 @@ class DetalleForm(forms.ModelForm):
 			"libro",
 			"fecha",
 			"tipo_comprobante",
+			"letra",
+			"sucursal",
 			"nfactura",
 			"cli_pro",
-			"alic",
-			"importe",
-			"ex_iva_insc",
-			"ex_19640",
-			"ret",
+			"gravado",
+			"no_gravado",
+			"iva21",
+			"iva105",
+			"iva_otros",
+			"rg2126",
+			"ret_IVA",
+			"ret_iibb",
+			"imp_int",
+			"otros",
 		]
 		
 	def __init__(self, *args, **kwargs):
@@ -108,9 +112,60 @@ class DetalleForm(forms.ModelForm):
 		self.helper.form_method = 'POST'
 		self.helper.form_action = ''
 
-		self.helper.label_class = 'col-lg-3 col-sm-3'
+		self.helper.label_class = 'col-lg-4 col-sm-4'
 		self.helper.field_class = 'col-lg-8 col-sm-8'
 
-		self.helper.add_input(Submit('submit', 'Enviar', css_class='btn-primary'))
+		self.helper.layout = Layout(
+			Field('libro', value="{{libro}}", type = "hidden"),
+			Fieldset(
+				'Detalle',
+				Div(
+					'fecha',
+					"sucursal",
+					'tipo_comprobante',
+					css_class='col-sm-6',
+				),
+				Div(
+					FieldWithButtons('cli_pro', StrictButton("Agregar", css_id="esteboton", data_load_url="{% url 'iva:a_cp_modal' %}", data_toggle="modal", data_target="#acpmodal")),
+					"letra",
+					"nfactura",
+					css_class='col-sm-6',
+				),
+			),
+			Div(
+				Fieldset(
+					'Valores',
+					Div(
+						PrependedText('gravado', '$'),
+						PrependedText('no_gravado', '$'),
+						PrependedText('iva21', '$'),
+						PrependedText('iva105', '$'),
+						PrependedText('iva_otros', '$'),
+						css_class='col-sm-6',
+					),
+					Div(
+						PrependedText('rg2126', '$'),
+						PrependedText('ret_IVA', '$'),
+						PrependedText('ret_iibb', '$'),
+						PrependedText('imp_int', '$'),
+						PrependedText('otros', '$'),
+						css_class='col-sm-6',
+					),
+				),
+				css_class='col-sm-12',
+			),
+			ButtonHolder(
+				Submit('submit', 'Enviar', css_class='btn-primary pull-right')
+			)
+			# PrependedAppendedText('gravado', '$','.00')
+		)
+
+		# self.helper[3:5].wrap_together(Div, css_class='grupo1')
+		# self.helper['tipo_comprobante'].wrap(Field, wrapper_class='tipocomprobante')
+		# self.helper['letra'].wrap(Field, wrapper_class='letra')
+		
+		# self.helper[7:16].wrap_together(Fieldset, 'Otros Valores')
+
+		#self.helper.add_input(Submit('submit', 'Enviar', css_class='btn-primary'))
 		
 
