@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="row">
-	<div class="col-md-8 col-md-offset-2">
+	<div class="col-md-10 col-md-offset-1">
 				<h1>{{ title }}</h1>
 				{% crispy form form.helper %}
 		<div align="left">
@@ -19,12 +19,10 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel">Nuevo Cliente/Proveedor</h4>
       </div>
-      <div class="modal-body">
+      <div id="aca" class="modal-body">
       </div>
       <div class="modal-footer">
-
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-primary">Guardar</button><p>: que cuando se guarde esa info se cargue en el select automaticamente. Darle funcion de guardar a este funcion con js? ver que tebgo dos forms, ver como lo hicieron los chicos en el de diagnostico</p>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
   </div>
@@ -36,8 +34,13 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	$("#esteboton").click(function(){
-        $(".modal-body").load("{% url 'iva:a_cp_modal' %}");
+        $("#aca").load("{% url 'iva:a_cp_modal' %}");
+
     });
+
+  $("#btnguardar").click(function(){
+    $("#id-CliProForm").submit();
+  });
 // 	document.getElementById("esteboton").onclick = function (e) {
 //     var loadurl = $(e.relatedTarget).data('load-url');
 //     document.getElementById("esteboton").innerHTML = {% url 'iva:a_cp_modal' %};

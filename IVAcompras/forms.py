@@ -112,25 +112,22 @@ class DetalleForm(forms.ModelForm):
 		self.helper.form_method = 'POST'
 		self.helper.form_action = ''
 
-		self.helper.label_class = 'col-lg-4 col-sm-4'
-		self.helper.field_class = 'col-lg-8 col-sm-8'
+		self.helper.label_class = 'col-lg-5 col-sm-5'
+		self.helper.field_class = 'col-lg-7 col-sm-7'
 
 		self.helper.layout = Layout(
 			Field('libro', value="{{libro}}", type = "hidden"),
-			Fieldset(
-				'Detalle',
-				Div(
-					'fecha',
-					"sucursal",
-					'tipo_comprobante',
-					css_class='col-sm-6',
-				),
-				Div(
-					FieldWithButtons('cli_pro', StrictButton("Agregar", css_id="esteboton", data_load_url="{% url 'iva:a_cp_modal' %}", data_toggle="modal", data_target="#acpmodal")),
-					"letra",
-					"nfactura",
-					css_class='col-sm-6',
-				),
+			Div(
+				'fecha',
+				"sucursal",
+				'tipo_comprobante',
+				css_class='col-sm-6',
+			),
+			Div(
+				FieldWithButtons('cli_pro', StrictButton("Agregar", css_id="esteboton", data_load_url="{% url 'iva:a_cp_modal' %}", data_toggle="modal", data_target="#acpmodal")),
+				"letra",
+				"nfactura",
+				css_class='col-sm-6',
 			),
 			Div(
 				Fieldset(

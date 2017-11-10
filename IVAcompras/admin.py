@@ -1,10 +1,20 @@
 from django.contrib import admin
-
-# Register your models here.
 from IVAcompras.models import Empresa, CliPro, Libro, Detalle
 # Register your models here.
+from import_export.admin import ImportExportModelAdmin
 
-admin.site.register(Empresa)
-admin.site.register(CliPro)
+@admin.register(Empresa)
+class EmpresaAdmin(ImportExportModelAdmin):
+    pass
+#admin.site.register(Empresa)
+
+@admin.register(CliPro)
+class CliProAdmin(ImportExportModelAdmin):
+    pass
+#admin.site.register(CliPro)
 admin.site.register(Libro)
-admin.site.register(Detalle)
+
+@admin.register(Detalle)
+class DetalleAdmin(ImportExportModelAdmin):
+    pass
+#admin.site.register(Detalle)

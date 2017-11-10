@@ -1,36 +1,4 @@
+<p>khghkbh</p>
+{% load crispy_forms_tags %}
 
-
-<form  class="form-horizontal" id="id-CliProForm" method="post" > <input type='hidden' name='csrfmiddlewaretoken' value='1o9x2aq5EKnWYKkJfIeSneSRxj9YEqcK7PZoPNelbPZjwSTJfz6qz6I4EN2ekURU' /> <div id="div_id_nombre" class="form-group"> <label for="id_nombre" class="control-label col-lg-3 col-sm-3 requiredField">
-                Razón Social<span class="asteriskField">*</span> </label> <div class="controls col-lg-8 col-sm-8"> <input class="textinput textInput form-control" id="id_nombre" maxlength="30" name="nombre" type="text" required /> </div> </div> <div id="div_id_direccion" class="form-group"> <label for="id_direccion" class="control-label col-lg-3 col-sm-3 requiredField">
-                Direccion<span class="asteriskField">*</span> </label> <div class="controls col-lg-8 col-sm-8"> <input class="textinput textInput form-control" id="id_direccion" maxlength="30" name="direccion" type="text" required /> </div> </div> <div id="div_id_telefono" class="form-group"> <label for="id_telefono" class="control-label col-lg-3 col-sm-3">
-                Telefono
-            </label> <div class="controls col-lg-8 col-sm-8"> <input class="textinput textInput form-control" id="id_telefono" maxlength="30" name="telefono" type="text" /> </div> </div> <div id="div_id_cuit" class="form-group"> <label for="id_cuit" class="control-label col-lg-3 col-sm-3 requiredField">
-                C.U.I.T.<span class="asteriskField">*</span> </label> <div class="controls col-lg-8 col-sm-8"> <input class="textinput textInput form-control" id="id_cuit" maxlength="30" name="cuit" type="text" required /> </div> </div> <div class="form-group"> <div class="controls col-lg-offset-3 col-lg-8 col-sm-8"> <div id="div_id_es_cliente" class="checkbox"> <label for="id_es_cliente" class=""> <input class="checkboxinput" id="id_es_cliente" name="es_cliente" type="checkbox" />
-                    Es cliente
-                    
-
-                </label> </div> </div> </div> <div class="form-group"> <div class="controls col-lg-offset-3 col-lg-8 col-sm-8"> <div id="div_id_es_proveedor" class="checkbox"> <label for="id_es_proveedor" class=""> <input class="checkboxinput" id="id_es_proveedor" name="es_proveedor" type="checkbox" />
-                    Es proveedor
-                    
-                </label> </div> </div> </div> <div id="div_id_iva" class="form-group"> <label for="id_iva" class="control-label col-lg-3 col-sm-3 requiredField">
-                Tipo I.V.A.<span class="asteriskField">*</span> </label> <div class="controls col-lg-8 col-sm-8"> <select class="select form-control" id="id_iva" name="iva" required>
-<option value="" selected="selected">---------</option>
-<option value="CF">Consumidor Final</option>
-<option value="I">Inscripto</option>
-<option value="NI">No Inscripto</option>
-<option value="M">Monotributo</option>
-<option value="E">Exento</option>
-</select> </div> </div> <div id="div_id_obs" class="form-group"> <label for="id_obs" class="control-label col-lg-3 col-sm-3">
-                Observaciones
-            </label> <div class="controls col-lg-8 col-sm-8"> <textarea class="textarea form-control" cols="40" id="id_obs" name="obs" rows="10">
-</textarea> </div> </div> 
-
-<!-- <div class="form-group"> 
-	<div class="aab controls col-lg-3 col-sm-3">
-	</div> 
-	<div class="controls col-lg-8 col-sm-8"> 
-		<input type="submit" name="submit" value="Enviar"  class="btn btn-primary btn-primary" id="submit-id-submit"/> 
-	</div> 
-</div>  -->
-
-</form>
+{% crispy form form.helper %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+	<div class="col-md-7 col-md-offset-1">
+		<h1>{{ title }}</h1>
+		<p>Seleccione el archivo a importar. La extension debe ser <code>.xls</code></p>
+		<form class="form-horizontal" method="post" enctype="multipart/form-data">
+		{% csrf_token %}
+		<div class="form-group">
+			<label class="control-label col-sm-5" for="myfile">Archivo a importar:</label>
+			<input id="myfile" type="file" name="myfile" required accept=".xls"/>
+		</div>
+		<div class="row">
+			<div class="col-sm-6" align="left">
+				<a class="btn btn-default btn-md" role="button" href="../"><span class="glyphicon glyphicon-chevron-left"></span>  Volver</a>
+	        </div>
+			<div class="col-sm-6" align="right">
+				<button class="btn btn-default btn-md" type="submit"><i class="fa fa-upload fa-lg" aria-hidden="true"></i> Importar</button>
+			</div>
+		</div>
+		</form>
+				
+
+
+				
+	</div>
+</div>
+{% endblock %}

@@ -3,6 +3,8 @@ from .models import *
 from .forms import *
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.forms.models import model_to_dict
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 """
 vistas:
 - Empresas: AMVD
@@ -13,9 +15,93 @@ vistas:
 y periodo
 - previsualizacion de la hoja del libro 
 """
-
+from .resources import *
+from tablib import Dataset
 
 # Create your views here.
+
+def exp_empresa(request):
+    empresa_resource = EmpresaResource()
+    dataset = empresa_resource.export()
+    # para que guarde como csv: se puede abrir con excel 
+    response = HttpResponse(dataset.xls, content_type='text/xls')
+    response['Content-Disposition'] = 'attachment; filename="empresa.xls"'
+    # para que guarde como json
+    #response = HttpResponse(dataset.json, content_type='application/json')
+    #response['Content-Disposition'] = 'attachment; filename="persons.json"'
+    return response
+def imp_empresa(request):
+    if request.method == 'POST':
+        empresa_resource = EmpresaResource()
+        dataset = Dataset()
+        new_empresa = request.FILES['myfile']
+
+        imported_data = dataset.load(new_empresa.read(), "xls")
+
+        result = empresa_resource.import_data(dataset, dry_run=True)  # Test the data import
+        if not result.has_errors():
+            empresa_resource.import_data(dataset, dry_run=False)  # Actually import now
+            return redirect("iva:l_empresa")
+    context = {
+    	"title": "Importar Empresa",
+	}
+    return render(request, 'importar.html', context)
+
+def exp_cli_pro(request):
+    CliPro_resource = CliProResource()
+    dataset = CliPro_resource.export()
+    # para que guarde como csv: se puede abrir con excel 
+    response = HttpResponse(dataset.xls, content_type='text/xls')
+    response['Content-Disposition'] = 'attachment; filename="clipro.xls"'
+    # para que guarde como json
+    #response = HttpResponse(dataset.json, content_type='application/json')
+    #response['Content-Disposition'] = 'attachment; filename="persons.json"'
+    return response
+def imp_cli_pro(request):
+    if request.method == 'POST':
+        CliPro_resource = CliProResource()
+        dataset = Dataset()
+        new_CliPro = request.FILES['myfile']
+
+        imported_data = dataset.load(new_CliPro.read(), "xls")
+
+        result = CliPro_resource.import_data(dataset, dry_run=True)  # Test the data import
+        if not result.has_errors():
+            CliPro_resource.import_data(dataset, dry_run=False)  # Actually import now
+            return redirect("iva:l_cli_pro")
+    context = {
+    	"title": "Importar Cliente-Proveedor",
+	}
+    return render(request, 'importar.html', context)
+
+# def exp_detalle(request):
+#     detalle_resource = DetalleResource()
+#     dataset = detalle_resource.export()
+#     # para que guarde como csv: se puede abrir con excel 
+#     response = HttpResponse(dataset.xls, content_type='text/xls')
+#     response['Content-Disposition'] = 'attachment; filename="libro.xls"'
+#     # para que guarde como json
+#     #response = HttpResponse(dataset.json, content_type='application/json')
+#     #response['Content-Disposition'] = 'attachment; filename="persons.json"'
+#     return response
+# def imp_detalle(request):
+#     if request.method == 'POST':
+#         detalle_resource = DetalleResource()
+#         dataset = Dataset()
+#         new_detalle = request.FILES['myfile']
+
+#         imported_data = dataset.load(new_detalle.read(), "xls")
+
+#         result = detalle_resource.import_data(dataset, dry_run=True)  # Test the data import
+#         if not result.has_errors():
+#             detalle_resource.import_data(dataset, dry_run=False)  # Actually import now
+#             return redirect("iva:l_libro")
+#     context = {
+#     	"title": "Importar Libro",
+# 	}
+#     return render(request, 'importar.html', context)
+
+
 def home(request):
 	querysetCliPro=CliPro.objects.all().order_by('-id')
 	list_emp=Empresa.objects.all().order_by('-id')
@@ -46,9 +132,25 @@ def home(request):
 # EMPRESA
 def l_empresa(request):
 	queryset = Empresa.objects.all().order_by('id')
-	
+	query = request.GET.get("q")
+	if query:
+		queryset = queryset.filter(nombre__icontains=query)
+
+	paginator = Paginator(queryset, 15) # Show 25 DetAna_queryset per page
+	page_request_var = "page"
+	page = request.GET.get(page_request_var)
+	try:
+		queryset_list = paginator.page(page)
+	except PageNotAnInteger:
+		# If page is not an integer, deliver first page.
+		queryset_list = paginator.page(1)
+	except EmptyPage:
+		# If page is out of range (e.g. 9999), deliver last page of results.
+		queryset_list = paginator.page(paginator.num_pages)
+
 	context = {
-		"object_list": queryset,
+		"page_request_var": page_request_var,
+		"object_list": queryset_list,
 		"title": "Empresas"
 	}
 	return render(request, "l_empresa.html", context)
@@ -113,8 +215,25 @@ def a_cp_modal(request):
 def l_cli_pro(request):
 	queryset = CliPro.objects.all().order_by('id')
 	
+	query = request.GET.get("q")
+	if query:
+		queryset = queryset.filter(nombre__icontains=query)
+
+	paginator = Paginator(queryset, 15) # Show 25 DetAna_queryset per page
+	page_request_var = "page"
+	page = request.GET.get(page_request_var)
+	try:
+		queryset_list = paginator.page(page)
+	except PageNotAnInteger:
+		# If page is not an integer, deliver first page.
+		queryset_list = paginator.page(1)
+	except EmptyPage:
+		# If page is out of range (e.g. 9999), deliver last page of results.
+		queryset_list = paginator.page(paginator.num_pages)
+
 	context = {
-		"object_list": queryset,
+		"page_request_var": page_request_var,
+		"object_list": queryset_list,
 		"title": "Clientes-Proveedores"
 	}
 	return render(request, "l_cli_pro.html", context)
@@ -186,15 +305,36 @@ def m_libro(request, id=None):
 	return render(request, "altas.html", context)
 def v_libro(request, id=None):
 	instance = get_object_or_404(Libro, id=id)
-	list_detalle = Detalle.objects.all().order_by('fecha').filter(libro=instance)
+	list_detalle = Detalle.objects.all().order_by('-fecha').filter(libro=instance)
 	imp_x_det={}
 	for d in list_detalle:
-		importe=d.gravado+d.no_gravado+d.iva21
+		importe=d.gravado+d.no_gravado+d.iva21+d.iva105+d.iva_otros+d.rg2126+d.ret_IVA+d.ret_iibb+d.imp_int+d.otros
 		imp_x_det[d.id]=importe
 	print(imp_x_det)
 	# print(list_detalle)
+
+
+	query = request.GET.get("q")
+	if query:
+		list_detalle = list_detalle.filter(sucursal__icontains=query)
+
+	paginator = Paginator(list_detalle, 10) # Show 25 DetAna_queryset per page
+	page_request_var = "page"
+	page = request.GET.get(page_request_var)
+	try:
+		queryset_list = paginator.page(page)
+	except PageNotAnInteger:
+		# If page is not an integer, deliver first page.
+		queryset_list = paginator.page(1)
+	except EmptyPage:
+		# If page is out of range (e.g. 9999), deliver last page of results.
+		queryset_list = paginator.page(paginator.num_pages)
+
 	context = {
-		"list_detalle": list_detalle,
+		"page_request_var": page_request_var,
+		"object_list": queryset_list,
+		"list_detalle": queryset_list,
+		# "list_detalle": list_detalle,
 		"imp_x_det": imp_x_det,
 		"instance" : instance,
 		"title": "Libro",
@@ -285,5 +425,6 @@ def l_detalle(request):
 	return render(request, "l_detalle.html", context)
 def d_detalle(request, id=None):
 	instance = get_object_or_404(Detalle, id=id)
+	id_libro = instance.libro.id
 	instance.delete()
-	return redirect("iva:home")
+	return redirect("iva:v_libro", id=id_libro)

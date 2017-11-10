@@ -1,7 +1,20 @@
 {% extends 'base.html' %}
 {% block content %}
 	<h1>{{ title }}</h1>
-					
+				<div class="col-sm-offset-6 col-sm-6">
+	<form class="form-horizontal" method="GET" action="">
+		<!-- {% csrf_token %} -->
+		<div class="form-group">
+			<div class="input-group">
+				<input type="text" name="q" class="form-control" placeholder="Buscar por Nombre" value="{{ request.GET.q}}">
+				<span class="input-group-btn">
+					<button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+				</span>
+			</div>
+
+		</div>
+	</form>
+</div>	
 				<table class="table table-hover table-condensed" align="center">
 					<thead class="theadbg">
 						<tr>
@@ -31,8 +44,25 @@
 						{% endfor %}
 					</tbody>
 				</table>
+				<div class="pagination">
+    <span class="step-links">
+        {% if object_list.has_previous %}
+            <a href="?{{ page_request_var }}={{ object_list.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q}}{% endif %}">Anterior</a>
+        {% endif %}
+
+        <span class="current">
+            Pág. {{ object_list.number }} de {{ object_list.paginator.num_pages }}.
+        </span>
+
+        {% if object_list.has_next %}
+            <a href="?{{ page_request_var }}={{ object_list.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q}}{% endif %}">Siguiente</a>
+        {% endif %}
+    </span>
+</div>
 				<div align="left">
 						<a class="btn btn-default btn-md" role="button" href="{% url 'iva:a_cli_pro' %}">Agregar Cliente / Proveedor <span class="glyphicon glyphicon-plus"></span></a>
+						<a class="btn btn-default btn-md" role="button" href="{% url 'iva:exp_cli_pro' %}">Exportar <i class="fa fa-file-excel-o fa-lg" aria-hidden="true"></i></a>
+						<a class="btn btn-default btn-md" role="button" href="{% url 'iva:imp_cli_pro' %}">Importar <i class="fa fa-upload fa-lg" aria-hidden="true"></i></a>
 	                </div>
 		  	
 {% endblock %}

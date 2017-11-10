@@ -15,7 +15,8 @@ en form detalle:
 	- guardar
 	- guardar y cargar otro
 
-importaciones y exportaciones a exell
+PARA importaciones y exportaciones a excel se uso libreria django-import-export
+http://django-import-export.readthedocs.io/en/latest/getting_started.html
 
 
 

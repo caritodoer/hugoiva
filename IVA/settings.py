@@ -39,12 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # third party
     'crispy_forms',
+    'import_export',
 
     # local apps
     'IVAcompras',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
+IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -123,6 +125,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
