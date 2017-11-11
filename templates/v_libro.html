@@ -16,40 +16,44 @@
 			{% endif %}
 		</dl>
 		<div align="left">
-				<ul class="list-inline">					
-			<li>
-		<a class="btn btn-default btn-md" role="button" href="{% url 'iva:home' %}"><span class="glyphicon glyphicon-chevron-left"></span>  Volver</a>
-			</li>
-			<li>
-		<a class="btn btn-danger btn-md" role="button" href="{% url 'iva:d_libro' id=instance.id %}"><span class="glyphicon glyphicon-remove"></span>  Eliminar Libro</a>
-			</li>
-			<li>
-				<a class="btn btn-default btn-md" role="button" href="{% url 'iva:m_empresa' id=instance.empresa.id %}"><span class="glyphicon glyphicon-pencil"></span>  Modificar Empresa</a></li>
-				<li>
-				<a class="btn btn-default btn-md" role="button" href="{% url 'iva:a_detalle' l=instance.id %}">Cargar Detalle  <span class="glyphicon glyphicon-plus"></span></a></li>
-		</ul>
-			
-			</div>
+			<ul class="list-inline">					
+			 <li>
+				<a class="btn btn-default btn-md" role="button" href="{% url 'iva:home' %}"><span class="glyphicon glyphicon-chevron-left"></span>  Volver</a>
+					</li>
+					<li>
+				<a class="btn btn-danger btn-md" role="button" href="{% url 'iva:d_libro' id=instance.id %}"><span class="glyphicon glyphicon-remove"></span>  Eliminar Libro</a>
+					</li>
+					<li>
+						<a class="btn btn-default btn-md" role="button" href="{% url 'iva:m_empresa' id=instance.empresa.id %}"><span class="glyphicon glyphicon-pencil"></span>  Modificar Empresa</a></li>
+						<li>
+						<a class="btn btn-default btn-md" role="button" href="{% url 'iva:a_detalle' l=instance.id %}">Cargar Detalle  <span class="glyphicon glyphicon-plus"></span></a></li>
+			</ul>
 		</div>
+	</div>
 </div>
 <div class="row">
-		<div class="col-md-10 col-md-offset-1">
-		
-			<h4>Detalle de Libro</h4>
-			<div class="col-sm-offset-6 col-sm-6">
+	<div class="col-md-10 col-md-offset-1">
+	<h4>Detalle de Libro</h4>
+<!-- div de busqueda -->
+<div class="col-sm-12">
 	<form class="form-horizontal" method="GET" action="">
 		<!-- {% csrf_token %} -->
 		<div class="form-group">
-			<div class="input-group">
-				<input type="text" name="q" class="form-control" placeholder="TIENE QUE BUSCAR POR FECHA!!!!" value="{{ request.GET.q}}">
-				<span class="input-group-btn">
-					<button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
-				</span>
+			<label class="control-label col-sm-3">Buscar por fecha:</label>
+			<div class="col-sm-4">
+				<input type="text" name="d" class="form-control" id="datepicker_d" placeholder="desde" required value="{{ request.GET.d}}">
 			</div>
-
+			<div class="col-sm-4">
+				<input type="text" name="h" class="form-control" id="datepicker_h"required placeholder="hasta" value="{{ request.GET.h}}">
+			</div>
+			<div class="col-sm-1">
+				<button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+			</div>
 		</div>
 	</form>
 </div>
+<!-- f in dediv de busqueda -->
+
 {% if list_detalle %}
 			<table class="table table-hover table-condensed table-responsive" align="center">	
 				<thead class="theadbg">
@@ -87,7 +91,7 @@
 			</table>
 		{% endif %}
 
-		<div class="pagination">
+<div class="pagination">
     <span class="step-links">
         {% if object_list.has_previous %}
             <a href="?{{ page_request_var }}={{ object_list.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q}}{% endif %}">Anterior</a>
@@ -106,17 +110,13 @@
 		</div>
 
 	</div>
-<!-- 
-<div class="row">
-	<div class="col-md-12" align="left">
-		<ul class="list-inline">					
-			<li>
-		<a class="btn btn-default btn-md" role="button" href="{% url 'iva:home' %}"><span class="glyphicon glyphicon-chevron-left"></span>  Volver</a>
-			</li>
-			<li>
-		<a class="btn btn-danger btn-md" role="button" href="{% url 'iva:d_libro' id=instance.id %}"><span class="glyphicon glyphicon-remove"></span>  Eliminar</a>
-			</li>
-		</ul>
-    </div>
-</div> -->
+
+{% endblock %}
+{% block javascript %} 
+<script type="text/javascript">
+  $( function() {
+    $( "#datepicker_d" ).datepicker();
+    $( "#datepicker_h" ).datepicker();
+  } );
+</script>
 {% endblock %}

@@ -314,9 +314,15 @@ def v_libro(request, id=None):
 	# print(list_detalle)
 
 
-	query = request.GET.get("q")
-	if query:
-		list_detalle = list_detalle.filter(sucursal__icontains=query)
+	desde = request.GET.get("d")
+	hasta = request.GET.get("h")
+	print(desde)
+	print(hasta)
+	if desde and hasta:
+		# list_detalle = list_detalle.filter(sucursal__icontains=query)
+		list_detalle = list_detalle.filter(fecha__range=(desde, hasta))
+		print(list_detalle)
+
 
 	paginator = Paginator(list_detalle, 10) # Show 25 DetAna_queryset per page
 	page_request_var = "page"
