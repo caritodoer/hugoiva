@@ -117,6 +117,38 @@
   $( function() {
     $( "#datepicker_d" ).datepicker();
     $( "#datepicker_h" ).datepicker();
+
+  //     $( function() {
+  //   var dateFormat = "yy/mm/dd",
+  //     from = $( "#datepicker_d" )
+  //       .datepicker({
+  //         defaultDate: "+1w",
+  //         changeMonth: true,
+  //         numberOfMonths: 1
+  //       })
+  //       .on( "change", function() {
+  //         to.datepicker( "option", "minDate", getDate( this ) );
+  //       }),
+  //     to = $( "#datepicker_h" ).datepicker({
+  //       defaultDate: "+1w",
+  //       changeMonth: true,
+  //       numberOfMonths: 1
+  //     })
+  //     .on( "change", function() {
+  //       from.datepicker( "option", "maxDate", getDate( this ) );
+  //     });
+ 
+  //   function getDate( element ) {
+  //     var date;
+  //     try {
+  //       date = $.datepicker.parseDate( dateFormat, element.value );
+  //     } catch( error ) {
+  //       date = null;
+  //     }
+ 
+  //     return date;
+  //   }
+  // } );
   } );
 </script>
 {% endblock %}
