@@ -9,7 +9,8 @@ from . import views
 #d=delete
 
 urlpatterns = [
-	url(r'^$', views.home, name='home'),
+	url(r'^home/$', views.home, name='home'),
+	url(r'^usuarios/$', views.usuarios, name='usuarios'),
 	# empresa
 
 	url(r'^a_empresa/$', views.a_empresa, name='a_empresa'),
@@ -31,8 +32,8 @@ urlpatterns = [
 	url(r'^d_cli_pro/(?P<id>\d+)/$', views.d_cli_pro, name='d_cli_pro'),
 
 	# Libro
-
 	url(r'^a_libro/(?P<k>[^/]+)/(?P<v>[^/]+)/$', views.a_libro, name='a_libro'),
+	url(r'^i_libro/(?P<id>\d+)/$', views.i_libro, name='i_libro'),
 	url(r'^m_libro/(?P<id>\d+)/$', views.m_libro),
 	url(r'^v_libro/(?P<id>\d+)/$', views.v_libro, name='v_libro'),
 	url(r'^d_libro/(?P<id>\d+)/$', views.d_libro, name='d_libro'),

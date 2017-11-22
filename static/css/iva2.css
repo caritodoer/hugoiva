@@ -16,17 +16,11 @@ src: url("../fonts/ubuntu-font-family-0.83/Ubuntu-B.ttf");
 font-family: "Ubuntu-L";
 src: url("../fonts/ubuntu-font-family-0.83/Ubuntu-L.ttf");
 }
-.container{
-padding-right: 15px !important;
-padding-left: 240px !important;
-margin-right: auto;
-margin-left: auto;
-}
 body{
   /*font-family: Ubuntu-L;*/
   padding-top: 70px;   /*linea agregada para usar en el menu provisorio*/
   padding-bottom: 30px;
-  padding-right: 240px;
+  padding-right: 0px;
   color: #fff; /*colo de texto de todo el documento*/
   background: #293949;
   font-family: 'Open-Sans',sans-serif;

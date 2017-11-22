@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row">
+
+	<div class="col-md-10 col-md-offset-1">
+<h1>{{ title }}</h1>
+		<dl class="dl-horizontal">
+			<dt>Empresa</dt>
+			<dd>{{ instance.empresa.nombre }}</dd>
+			<dt>CUIT</dt>
+			<dd>{{ instance.empresa.cuit }}</dd>
+			<dt>Libro</dt>
+			{% if instance.tipo_libro == 'C' %}
+				<dd>Compras</dd>
+			{% else %}
+				<dd>Ventas</dd>
+			{% endif %}
+		</dl>
+	</div>
+	<div class="col-sm-12">
+	<form class="form-horizontal" method="GET" action="">
+		<!-- {% csrf_token %} -->
+		<div class="form-group">
+			<label class="control-label col-sm-3">Periodo:</label>
+			<div class="col-sm-4">
+				<input type="text" name="d" class="form-control" id="datepicker_d" placeholder="desde" required value="{{ request.GET.d}}">
+			</div>
+			<div class="col-sm-4">
+				<input type="text" name="h" class="form-control" id="datepicker_h"required placeholder="hasta" value="{{ request.GET.h}}">
+			</div>
+			<div class="col-sm-1">
+				<button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+			</div>
+		</div>
+	</form>
+</div>
+</div>
+
+{% endblock %}
+{% block javascript %} 
+<script type="text/javascript">
+  $( function() {
+    $( "#datepicker_d" ).datepicker();
+    $( "#datepicker_h" ).datepicker();
+  } );
+</script>
+{% endblock %}

@@ -27,6 +27,7 @@
 						<a class="btn btn-default btn-md" role="button" href="{% url 'iva:m_empresa' id=instance.empresa.id %}"><span class="glyphicon glyphicon-pencil"></span>  Modificar Empresa</a></li>
 						<li>
 						<a class="btn btn-default btn-md" role="button" href="{% url 'iva:a_detalle' l=instance.id %}">Cargar Detalle  <span class="glyphicon glyphicon-plus"></span></a></li>
+						<li><a class="btn btn-default btn-md" role="button" href="{% url 'iva:i_libro' id=instance.id %}">Imprimir  <span class="glyphicon glyphicon-print"></span></a></li>
 			</ul>
 		</div>
 	</div>

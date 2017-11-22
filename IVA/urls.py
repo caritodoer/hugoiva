@@ -15,8 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from cuentas.views import *
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'', include('IVAcompras.urls', namespace='iva')),
+    url(r'^logout/', logout_view, name="logout"),
+    url(r'^register/', register_view, name="register"),
+    url(r'^$', login_view, name="login"),
 ]

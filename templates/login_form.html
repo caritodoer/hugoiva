@@ -1,0 +1,36 @@
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html >
+	<head>
+		<meta charset="UTF-8">
+		<title>IVA Ventas / Compras</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"> <!-- meta viewport para maparatos mobiles -->
+
+		<link rel="stylesheet" href="/static/css/bootstrap.css">
+	<link rel="stylesheet" href="/static/css/iva2.css">
+	<link rel="stylesheet" href="/static/css/font-awesome.css">
+	<link rel="stylesheet" href="/static/css/jquery-ui.css">
+
+
+	</head>
+	<body>
+		<div class="container" align="center">
+			<header>
+				<h1>Sistema de Gestion <br><small> IVA VENTAS / IVA COMPRAS</small></h1>
+
+			</header>
+			<!-- CONTENIDO -->
+			<h1 align="center">{{ title }}</h1>
+				<div class="row">
+					<div class="col-sm-4 col-sm-offset-4">
+					<!-- INICIO DEL FORM -->
+						<form method="POST">{% csrf_token %}
+							{{ form|crispy }}
+							<input type="submit" class="btn btn-default" value="Entar" />
+						</form>
+					</div>
+				</div>
+		</div>
+	</body>
+</html>	

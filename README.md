@@ -1,13 +1,13 @@
 # hugoiva
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+en tabla de libros:
 * paginacion en tablas (hasta 20 registros)
-* busqueda/filtro por encima de tablas
+* busqueda/filtro por encima de tablas que busque por empresa.
+
 * pdf ---> ver formato de 
 					- informes DGR (HUGO)
 					- hoja libros
-* ABM usuarios + login/logout + permisos desde admin de django
 
 en form detalle: 
 # boton agreagr cliente que abra un modal--falta guardar
@@ -15,10 +15,10 @@ en form detalle:
 	- guardar
 	- guardar y cargar otro
 
-PARA importaciones y exportaciones a excel se uso libreria django-import-export
-http://django-import-export.readthedocs.io/en/latest/getting_started.html
 
+en detalle del libro, que verifique que las fechas de fin no sea anterior a la de inicio u viceversa.
 
+que muestre el libro por el rango de fechas seleccionado? 
 
 
 
@@ -28,6 +28,9 @@ http://django-import-export.readthedocs.io/en/latest/getting_started.html
 
 
 ####################
+PARA importaciones y exportaciones a excel se uso libreria django-import-export
+http://django-import-export.readthedocs.io/en/latest/getting_started.html
+* ABM usuarios + login/logout + permisos desde admin de django
 templates:
 - home:
 	*menu
