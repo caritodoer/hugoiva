@@ -29,7 +29,7 @@ class CliProForm(forms.ModelForm):
 		self.helper.label_class = 'col-lg-3 col-sm-3'
 		self.helper.field_class = 'col-lg-8 col-sm-8'
 
-		self.helper.add_input(Submit('submit', 'Enviar', css_class='btn-primary'))
+		self.helper.add_input(Submit('submit', 'Enviar', css_id="nuevo_cliente", css_class='btn-primary'))
 	
 class EmpresaForm(forms.ModelForm):
 	class Meta:
@@ -124,7 +124,7 @@ class DetalleForm(forms.ModelForm):
 				css_class='col-sm-6',
 			),
 			Div(
-				FieldWithButtons('cli_pro', StrictButton("Agregar", css_id="esteboton", data_load_url="{% url 'iva:a_cp_modal' %}", data_toggle="modal", data_target="#acpmodal")),
+				FieldWithButtons('cli_pro', StrictButton("Agregar", css_id="esteboton", data_toggle="modal", data_target="#acpmodal")),
 				"letra",
 				"nfactura",
 				css_class='col-sm-6',

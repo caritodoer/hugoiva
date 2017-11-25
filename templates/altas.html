@@ -5,7 +5,7 @@
 <div class="row">
 	<div class="col-md-10 col-md-offset-1">
 				<h1>{{ title }}</h1>
-				{% crispy form form.helper %}
+				{% crispy detalle_form detalle_form.helper %}
 		<div align="left">
 			<a class="btn btn-default btn-md" role="button" href="{{ url }}"><span class="glyphicon glyphicon-chevron-left"></span>  Volver</a>
         </div>
@@ -20,6 +20,7 @@
         <h4 class="modal-title" id="myModalLabel">Nuevo Cliente/Proveedor</h4>
       </div>
       <div id="aca" class="modal-body">
+        {% crispy cliente_form cliente_form.helper %}
       </div>
       <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
@@ -36,36 +37,12 @@ $(document).ready(function() {
   $( "#id_fecha" ).datepicker();
 
 
-	$("#esteboton").click(function(){
-        $("#aca").load("{% url 'iva:a_cp_modal' %}");
 
-    });
 
   $("#btnguardar").click(function(){
     $("#id-CliProForm").submit();
   });
-// 	document.getElementById("esteboton").onclick = function (e) {
-//     var loadurl = $(e.relatedTarget).data('load-url');
-//     document.getElementById("esteboton").innerHTML = {% url 'iva:a_cp_modal' %};
-//     $(this).find('.modal-body').load(loadurl);
-// // 		window.open({% url 'iva:a_cp_modal' %}, "", "width=600,height=600,toolbar=yes,scrollbars=yes")
-// // 		// myFunction()
-// 	};
 
-// 	// function myFunction() {
-// 	//     document.getElementById("esteboton").innerHTML = "YOU CLICKED ME!";
-// 	// }
-
-
-// $('#acpmodal').on('show.bs.modal', function (e) {
-//     var loadurl = $(e.relatedTarget).data('load-url');
-//     $(this).find('.modal-body').load(loadurl);
-// });
-
-// $('#acpmodal').on('show.bs.modal', function (e) {
-//     var loadurl = e.relatedTarget.dataset.loadUrl;
-//     $(this).find('.modal-body').load(loadurl);
-// });
 
 });
 </script> 

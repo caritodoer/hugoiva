@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row">
+
+	<div class="col-md-10 col-md-offset-1">
+<h1>{{ title }}</h1>
+		<dl class="dl-horizontal">
+			<dt>Empresa</dt>
+			<dd>{{ instance.empresa.nombre }}</dd>
+			<dt>CUIT</dt>
+			<dd>{{ instance.empresa.cuit }}</dd>
+			<dt>Libro</dt>
+			{% if instance.tipo_libro == 'C' %}
+				<dd>Compras</dd>
+			{% else %}
+				<dd>Ventas</dd>
+			{% endif %}
+		</dl>
+	</div>
+	<div class="col-sm-12">
+	<form class="form-horizontal" method="GET" action="">
+		<!-- {% csrf_token %} -->
+		<!-- <div class="form-group">
+			<label class="control-label col-sm-3">Periodo:</label>
+			<div class="col-sm-4">
+				<input type="text" name="m" class="form-control" id="datepicker_m" required value="{{ request.GET.m}}">
+			</div>
+			<div class="col-sm-4">
+				<input type="text" name="a" class="form-control" id="datepicker_a"required value="{{ request.GET.a}}">
+			</div>
+			<div class="col-sm-1">
+
+				<button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+			</div>
+		</div> -->
+
+		<div class="form-group">
+			<label class="control-label col-sm-3">Periodo:</label>
+			<div class="col-sm-4">
+				
+					<select name="m" class="form-control" required value="{{ request.GET.m}}">
+					  <option value="1">Enero</option>
+					  <option value="2">Febrero</option>
+					  <option value="3">Marzo</option>
+					  <option value="4">Abril</option>
+					  <option value="5">Mayo</option>
+					  <option value="6">Junio</option>
+					  <option value="7">Julio</option>
+					  <option value="8">Agosto</option>
+					  <option value="9">Septiembre</option>
+					  <option value="10">Octubre</option>
+					  <option value="11">Noviembre</option>
+					  <option value="12">Diciembre</option>
+					</select> 
+			</div>
+			<div class="col-sm-4">
+				<input type="text" name="a" pattern="[0-9]{4}" maxlength="4" class="form-control" required value="{{ request.GET.a}}" placeholder="Año">
+			</div>
+			<div class="col-sm-1">
+				<button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+			</div>
+		</div>
+	</form>
+</div>
+</div>
+
+{% endblock %}
+{% block javascript %} 
+<script type="text/javascript">
+  $(document).ready(function() {
+  	
+    // $( "#datepicker_m" ).datepicker({dateFormat: "mm"});
+    // $( "#datepicker_a" ).datepicker({dateFormat: "yy"});
+  } );
+</script>
+{% endblock %}

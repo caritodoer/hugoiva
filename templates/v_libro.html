@@ -3,7 +3,7 @@
 
 <div class="row">
 
-	<div class="col-md-10 col-md-offset-1">
+	<div class="col-md-12">
 		<h1>{{instance.empresa.nombre}}</h1>
 		<dl class="dl-horizontal">
 			<dt>CUIT</dt>
@@ -28,12 +28,13 @@
 						<li>
 						<a class="btn btn-default btn-md" role="button" href="{% url 'iva:a_detalle' l=instance.id %}">Cargar Detalle  <span class="glyphicon glyphicon-plus"></span></a></li>
 						<li><a class="btn btn-default btn-md" role="button" href="{% url 'iva:i_libro' id=instance.id %}">Imprimir  <span class="glyphicon glyphicon-print"></span></a></li>
+						<li><a class="btn btn-default btn-md" role="button" href="{% url 'iva:i_dgr' id=instance.id %}">Informe DGR  <span class="glyphicon glyphicon-print"></span></a></li>
 			</ul>
 		</div>
 	</div>
 </div>
 <div class="row">
-	<div class="col-md-10 col-md-offset-1">
+	<div class="col-md-12">
 	<h4>Detalle de Libro</h4>
 <!-- div de busqueda -->
 <div class="col-sm-12">

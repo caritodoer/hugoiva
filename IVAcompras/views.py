@@ -5,7 +5,8 @@ from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.forms.models import model_to_dict
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import authenticate, get_user_model, login, logout
-
+from datetime import datetime, date, time, timedelta
+import calendar
 User = get_user_model()
 """
 vistas:
@@ -278,21 +279,6 @@ def d_empresa(request, id=None):
 	instance.delete()
 	return redirect("iva:home")
 
-def a_cp_modal(request):
-	if not request.user.is_authenticated():
-		raise Http404
-	form = CliProForm(request.POST or None)
-	if form.is_valid():
-		instance = form.save(commit=False)
-		instance.save()
-		return HttpResponseRedirect(instance.get_absolute_url())
-	else:
-		print (form.errors)
-	context = {
-		"title" : "Alta de Cliente/Proveedor",
-		"form": form,
-	}
-	return render(request, "a_cp_modal.html", context)
 
 # Cliente/Proveedor
 def l_cli_pro(request):
@@ -372,6 +358,94 @@ def d_cli_pro(request, id=None):
 	return redirect("iva:home")
 
 # Libro 
+def i_dgr(request, id=None):
+	if not request.user.is_authenticated():
+		raise Http404
+	instance = get_object_or_404(Libro, id=id)
+	if instance.tipo_libro == "V":
+		tipo_libro="Libro Ventas"
+	else:
+		tipo_libro="Libro Compras"
+	
+	mes = request.GET.get("m")
+	anio = request.GET.get("a")
+	print(mes)
+	print(anio)
+	if mes and anio:
+		list_detalle = Detalle.objects.filter(libro=instance, fecha__year=anio, fecha__month=mes)
+		
+
+		#inicio reportlab
+		response = HttpResponse(content_type='application/pdf')
+		pdf_name = "Informe_dgr_%d.pdf" %instance.id
+		response['Content-Disposition'] = 'filename=%s; pagesize=A4' %pdf_name
+		buff = BytesIO()
+		title = "Informe_DGR_%d" %instance.id
+		
+		Story = [Spacer(1, 0)]
+		style = styles["textos"]
+		
+		def myFirstPage(canvas, doc):
+			canvas.saveState()
+			# numeracion de pagina
+			canvas.setFont('Ubuntu-R', 8)
+			canvas.drawString(inch, 0.75 * inch, "Pagina %d / %s - Informe DGR - Periodo: %s - %s" %(doc.page, instance.empresa, mes, anio))
+			canvas.restoreState()
+		def cuerpo(canvas): 
+			titulo = Paragraph("Informe DGR", tit1) 
+			Story.append(titulo)
+			Story.append(Spacer(1, 30))
+
+			empresa = Paragraph("""<b>Empresa: </b>"""+instance.empresa.nombre+"""<br/><b>C.U.I.T.: </b>"""+instance.empresa.cuit+"""<br/><b>Propietario: </b>"""+instance.empresa.propietario
+				+"""<br/><b>Localidad: </b>"""+instance.empresa.localidad+"""<br/><b>Direccion: </b>"""+instance.empresa.direccion+"""<br/><b>Telefono: </b>"""+instance.empresa.telefono
+				+"""<br/><b>Directorio: </b>"""+instance.empresa.directorio, styles["Normal"]) 
+			Story.append(empresa)
+			Story.append(Spacer(1, 12))
+
+			
+			# fm=str(mes)
+			# fa=str(anio)
+			# ft=fm+" - "+fa
+			
+
+			fecha = Paragraph("""<b>Periodo: </b>"""+mes+""" - """+anio, styles["Normal"]) 
+			Story.append(fecha)
+			Story.append(Spacer(1, 12))
+
+
+			total=0
+			for r in list_detalle:
+				subtotal=0
+				subtotal=r.gravado+r.no_gravado+r.iva21+r.iva105+r.iva_otros+r.rg2126+r.ret_IVA+r.ret_iibb+r.imp_int+r.otros
+				total = total+subtotal
+
+				f=str(r.fecha)
+				s=str(subtotal)
+				fecha = Paragraph("""<b>Fecha: </b>"""+f+""" - Subtotal: """+s, styles["Normal"]) 
+				Story.append(fecha)
+				Story.append(Spacer(1, 12))
+
+			tt=str(total)
+			tot = Paragraph("""<b>Total: </b>"""+tt, styles["Normal"])  
+			Story.append(tot)
+			
+			return Story
+
+		Story = cuerpo(canvas)
+		doc = SimpleDocTemplate(buff, pagesize=A4, rightMargin=72, leftMargin=72, topMargin=72, bottomMargin=75)
+		#Construimos el documento a partir de los argumentos definidos
+		doc.build(Story, onFirstPage=myFirstPage, onLaterPages=myFirstPage)
+		response.write(buff.getvalue())
+		buff.close()
+		return response
+	
+	context = {
+		# "desde": desde,
+		# "hasta": hasta,
+		"instance": instance,
+		"title": "Informe DGR",
+	}
+	return render(request, "i_dgr.html", context)
 def i_libro(request, id=None):
 	if not request.user.is_authenticated():
 		raise Http404
@@ -404,6 +478,10 @@ def i_libro(request, id=None):
 			canvas.drawString(inch, 0.75 * inch, "Pagina %d / %s - %s - Periodo: %s - %s" %(doc.page, instance.empresa, tipo_libro, desde, hasta))
 			canvas.restoreState()
 		def cuerpo(canvas): 
+			libro = Paragraph(tipo_libro, tit1) 
+			Story.append(libro)
+			Story.append(Spacer(1, 30))
+
 			empresa = Paragraph("""<b>Empresa: </b>"""+instance.empresa.nombre+"""<br/><b>C.U.I.T.: </b>"""+instance.empresa.cuit+"""<br/><b>Propietario: </b>"""+instance.empresa.propietario
 				+"""<br/><b>Localidad: </b>"""+instance.empresa.localidad+"""<br/><b>Direccion: </b>"""+instance.empresa.direccion+"""<br/><b>Telefono: </b>"""+instance.empresa.telefono
 				+"""<br/><b>Directorio: </b>"""+instance.empresa.directorio, styles["Normal"]) 
@@ -417,9 +495,6 @@ def i_libro(request, id=None):
 			Story.append(fecha)
 			Story.append(Spacer(1, 12))
 
-			libro = Paragraph(tipo_libro, tit1) 
-			Story.append(libro)
-			Story.append(Spacer(1, 20))
 
 			headings = ["Fecha", "TC", "Lt", "Suc", "N°", "Cliente/Proveedo - CUIT", "Gravado", "No Gravado", "IVA 21%", "IVA 10,5%", "IVA Otros", "RG2126", "Ret. IVA", "Ret. IIBB", "Imp. Int.", "Otros", "Total"]
 			allregistros = []
@@ -473,7 +548,6 @@ def i_libro(request, id=None):
 		"title": "Imprimir Libro",
 	}
 	return render(request, "i_libro.html", context)
-
 def a_libro(request, k=None, v=None):
 	if not request.user.is_authenticated():
 		raise Http404
@@ -582,6 +656,21 @@ def d_libro(request, id=None):
 	return redirect("iva:home")
 
 # Detalle 
+# def a_cp_modal(request):
+# 	if not request.user.is_authenticated():
+# 		raise Http404
+# 	form = CliProForm(request.POST or None)
+# 	if form.is_valid():
+# 		instance = form.save(commit=False)
+# 		instance.save()
+# 		return HttpResponseRedirect(instance.get_absolute_url())
+# 	else:
+# 		print (form.errors)
+# 	context = {
+# 		"title" : "Alta de Cliente/Proveedor",
+# 		"form": form,
+# 	}
+# 	return render(request, "a_cp_modal.html", context)
 
 def a_detalle(request, l=None):
 	if not request.user.is_authenticated():
@@ -589,18 +678,25 @@ def a_detalle(request, l=None):
 	libro = get_object_or_404(Libro, id=l)
 	instance = Detalle(libro=libro)
 	#instance.save()
-	form = DetalleForm(request.POST or None, instance=instance)
+	detalle_form = DetalleForm(request.POST or None, instance=instance)
+	cliente_form = CliProForm(request.POST or None)
+	if cliente_form.is_valid():
 	
-	if form.is_valid():
-		instance = form.save(commit=False)
-		instance.save()
-		return HttpResponseRedirect(instance.get_absolute_url())
-	else:
-		print (form.errors)
+		if detalle_form.is_valid():
+			instance_c = cliente_form.save(commit=False)
+			instance_c.save()
+
+			instance = detalle_form.save(commit=False)
+			instance.save()
+			return HttpResponseRedirect(instance.get_absolute_url())
+		else:
+			print (detalle_form.errors)
 	context = {
 		"libro": libro,
 		"title" : "Alta de Detalle",
-		"form": form,
+		"detalle_form": detalle_form,
+		"titulo2": "Alta Cliente-Proveedor",
+		"cliente_form": cliente_form,
 
 	}
 	return render(request, "altas.html", context)

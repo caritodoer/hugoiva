@@ -22,7 +22,7 @@ urlpatterns = [
 	url(r'^d_empresa/(?P<id>\d+)/$', views.d_empresa, name='d_empresa'),
 
 	# cliente_proveedor
-	url(r'^a_cp_modal/$', views.a_cp_modal, name='a_cp_modal'),
+	# url(r'^a_cp_modal/$', views.a_cp_modal, name='a_cp_modal'),
 	url(r'^a_cli_pro/$', views.a_cli_pro, name='a_cli_pro'),
 	url(r'^exp_cli_pro/$', views.exp_cli_pro, name='exp_cli_pro'),
 	url(r'^imp_cli_pro/$', views.imp_cli_pro, name='imp_cli_pro'),
@@ -39,6 +39,7 @@ urlpatterns = [
 	url(r'^d_libro/(?P<id>\d+)/$', views.d_libro, name='d_libro'),
 	url(r'^l_libro/$', views.l_libro, name='l_libro'),
 
+	url(r'^i_dgr/(?P<id>\d+)/$', views.i_dgr, name='i_dgr'),
 	# Detalle
 
 	# url(r'^exp_detalle/$', views.exp_detalle, name='exp_detalle'),
