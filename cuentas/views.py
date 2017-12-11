@@ -23,7 +23,7 @@ def login_view(request):
 
 def register_view(request):
 	print(request.user.is_authenticated())
-	title = "Registrar"
+	title = "Registrar Usuario"
 	form = UserRegisterForm(request.POST or None)
 	if form.is_valid():
 		user = form.save(commit=False)

@@ -1,16 +1,9 @@
 # hugoiva
 
 
-i_libro
-i_dgr
-cambiar botones para que abran en _blank
 
 en detalle del libro, que verifique que las fechas de fin no sea anterior a la de inicio u viceversa.
 
-
-en los botones de eliminar poner un window alert de  
-"ELIMINACION EN CASCADA!!
-Esta seguro que desea eliminar? Esta accion no se puede deshacer"
 
 
 
@@ -22,6 +15,13 @@ Esta seguro que desea eliminar? Esta accion no se puede deshacer"
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+en los botones de eliminar poner un window alert de  
+"ELIMINACION EN CASCADA!!
+Esta seguro que desea eliminar? Esta accion no se puede deshacer"
+
+i_libro
+i_dgr
+cambiar botones para que abran en _blank
 en tabla de libros:
 * paginacion en tablas (hasta 20 registros)
 * busqueda/filtro por encima de tablas que busque por empresa.

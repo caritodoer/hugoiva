@@ -8,8 +8,8 @@ from crispy_forms.bootstrap import StrictButton, FieldWithButtons, PrependedText
 User = get_user_model()
 
 class UserLoginForm(forms.Form):
-	username = forms.CharField()
-	password = forms.CharField(widget=forms.PasswordInput)
+	username = forms.CharField(label='Usuario')
+	password = forms.CharField(widget=forms.PasswordInput, label='Contraseña')
 
 	def clean(self, *args, **kwargs):
 		username = self.cleaned_data.get("username")
@@ -27,9 +27,10 @@ class UserLoginForm(forms.Form):
 		return super(UserLoginForm, self).clean(*args, **kwargs)
 
 class UserRegisterForm(forms.ModelForm):
+	username = forms.CharField(label='Usuario', help_text='150 caracteres o menos. Letras, digitos y @/./+/-/_ solamente.')
+	password = forms.CharField(widget=forms.PasswordInput, label='Contraseña')
 	email = forms.EmailField(label='Email')
 	email2 = forms.EmailField(label='Confirme Email')
-	password = forms.CharField(widget=forms.PasswordInput)
 	class Meta:
 		model = User
 		fields = [

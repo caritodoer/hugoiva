@@ -4,7 +4,7 @@ from django.core.validators import MinValueValidator
 from decimal import Decimal
 
 class Empresa(models.Model):
-	nombre = models.CharField(max_length=20, unique=True)
+	nombre = models.CharField(max_length=50, unique=True)
 	propietario = models.CharField(max_length=50)
 	cuit = models.CharField("CUIT", max_length=13, unique=True)
 	localidad = models.CharField(max_length=50)

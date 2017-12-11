@@ -258,6 +258,7 @@ def m_empresa(request, id=None):
 	else:
 		print (form.errors)
 	context = {
+		"url": "/l_empresa",
 		"title" : "Modificar Empresa",
 		"instance" : instance,
 		"form" : form,
@@ -339,6 +340,7 @@ def m_cli_pro(request, id=None):
 		"title" : "Modificar Cliente/Proveedor",
 		"instance" : instance,
 		"form" : form,
+		"url": "/l_cli_pro",
 	}
 	return render(request, "altas.html", context)
 def v_cli_pro(request, id=None):
@@ -419,14 +421,14 @@ def i_dgr(request, id=None):
 				subtotal=r.gravado+r.no_gravado+r.iva21+r.iva105+r.iva_otros+r.rg2126+r.ret_IVA+r.ret_iibb+r.imp_int+r.otros
 				total = total+subtotal
 
-				f=str(r.fecha)
-				s=str(subtotal)
-				fecha = Paragraph("""<b>Fecha: </b>"""+f+""" - Subtotal: """+s, styles["Normal"]) 
-				Story.append(fecha)
-				Story.append(Spacer(1, 12))
+				# f=str(r.fecha)
+				# s=str(subtotal)
+				# fecha = Paragraph("""<b>Fecha: </b>"""+f+""" - Subtotal: """+s, styles["Normal"]) 
+				# Story.append(fecha)
+				# Story.append(Spacer(1, 12))
 
 			tt=str(total)
-			tot = Paragraph("""<b>Total: </b>"""+tt, styles["Normal"])  
+			tot = Paragraph("""<b>Total: $</b>"""+tt, styles["Normal"])  
 			Story.append(tot)
 			
 			return Story
@@ -579,7 +581,7 @@ def v_libro(request, id=None):
 	if not request.user.is_authenticated():
 		raise Http404
 	instance = get_object_or_404(Libro, id=id)
-	list_detalle = Detalle.objects.all().order_by('-fecha').filter(libro=instance)
+	list_detalle = Detalle.objects.all().order_by('-fecha', '-tipo_comprobante', 'letra', '-nfactura').filter(libro=instance)
 	imp_x_det={}
 	for d in list_detalle:
 		importe=d.gravado+d.no_gravado+d.iva21+d.iva105+d.iva_otros+d.rg2126+d.ret_IVA+d.ret_iibb+d.imp_int+d.otros
@@ -691,6 +693,7 @@ def a_detalle(request, l=None):
 		"title" : "Alta de Detalle",
 		"form": form,
 		"titulo2": "Alta Cliente-Proveedor",
+		"url": "/v_libro/"+l,
 	}
 	return render(request, "altas.html", context)
 def m_detalle(request, id=None):
@@ -704,10 +707,12 @@ def m_detalle(request, id=None):
 		return HttpResponseRedirect(instance.get_absolute_url())
 	else:
 		print (form.errors)
+	l=str(instance.libro.id)
 	context = {
 		"title" : "Modificar Detalle",
 		"instance" : instance,
 		"form" : form,
+		"url": "/v_libro/"+l,
 	}
 	return render(request, "altas.html", context)
 def v_detalle(request, id=None):
