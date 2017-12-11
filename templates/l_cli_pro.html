@@ -31,14 +31,23 @@
 					<tbody>
 						{% for obj in object_list %}
 						<tr>
-							<td><b><a href="{{ obj.get_absolute_url }}">{{ obj.nombre }}</a></b></td>
-							<td>{{ obj.direccion }}</td>
-							<td>{{ obj.telefono }}</td>
+							<td><b><a href="{{ obj.get_absolute_url }}">{{ obj.nombre|truncatechars:15 }}</a></b></td>
+							<td>{{ obj.direccion|truncatechars:15 }}</td>
+							<td>{{ obj.telefono|truncatechars:18 }}</td>
 							<td>{{ obj.cuit }}</td>
-							<td>{{ obj.es_cliente }}</td>
-							<td>{{ obj.es_proveedor }}</td>
-							<td>{{ obj.iva }}</td>
-							<td>{{ obj.obs }}</td>
+							<td>{% if obj.es_cliente %}
+						<span class="glyphicon glyphicon-ok"></span>
+								{% endif %}</td>
+							<td>{% if obj.es_proveedor %}
+						<span class="glyphicon glyphicon-ok"></span>
+								{% endif %}</td>
+							<td>{% if obj.iva == 'CF' %}Consumidor Final{% endif %}
+								{% if obj.iva == 'I' %}Inscripto{% endif %}
+								{% if obj.iva == 'NI' %}No Inscripto{% endif %}
+								{% if obj.iva == 'M' %}Monotributo{% endif %}
+								{% if obj.iva == 'E' %}Excento{% endif %}
+								</td>
+							<td>{{ obj.obs|truncatechars:16 }}</td>
 									
 						</tr>
 						{% endfor %}

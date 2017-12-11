@@ -21,7 +21,9 @@
 				<a class="btn btn-default btn-md" role="button" href="{% url 'iva:home' %}"><span class="glyphicon glyphicon-chevron-left"></span>  Volver</a>
 					</li>
 					<li>
-				<a class="btn btn-danger btn-md" role="button" href="{% url 'iva:d_libro' id=instance.id %}"><span class="glyphicon glyphicon-remove"></span>  Eliminar Libro</a>
+						<button id="elim" class="btn btn-danger btn-md" type="button"><span class="glyphicon glyphicon-remove"></span>  Eliminar Libro</button>
+						
+				
 					</li>
 					<li>
 						<a class="btn btn-default btn-md" role="button" href="{% url 'iva:m_empresa' id=instance.empresa.id %}"><span class="glyphicon glyphicon-pencil"></span>  Modificar Empresa</a></li>
@@ -86,7 +88,8 @@
 						{% endif %}
 					{% endfor %}
 					<td><a href="{% url 'iva:m_detalle' id=d.id %}"><span class="glyphicon glyphicon-pencil"></span></a></td>
-					<td><a href="{% url 'iva:d_detalle' id=d.id %}"><i class="fa fa-trash-o fa-lg" aria-hidden="true"></i></a></td>
+					<td>
+						<a href="{% url 'iva:v_detalle' id=d.id %}">Ver</a></td>
 				</tr>
 				{% endfor %}
 				</tbody>
@@ -116,6 +119,16 @@
 {% endblock %}
 {% block javascript %} 
 <script type="text/javascript">
+
+$('#elim').click(function(){
+
+	if(window.confirm('Eliminacion en cascada: La siguiente operacion no se puede deshacer y afectará a todos los registros relacionados. ¿Esta seguro que desea continuar?'))
+	{
+		$(location).attr('href',"../../d_libro/"+{{ instance.id }});
+		
+	}
+});
+
   $( function() {
     $( "#datepicker_d" ).datepicker();
     $( "#datepicker_h" ).datepicker();

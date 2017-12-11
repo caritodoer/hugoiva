@@ -4,9 +4,9 @@ from django.core.validators import MinValueValidator
 from decimal import Decimal
 
 class Empresa(models.Model):
-	nombre = models.CharField(max_length=20)
+	nombre = models.CharField(max_length=20, unique=True)
 	propietario = models.CharField(max_length=50)
-	cuit = models.CharField("CUIT", max_length=50)
+	cuit = models.CharField("CUIT", max_length=13, unique=True)
 	localidad = models.CharField(max_length=50)
 	direccion = models.CharField(max_length=50)
 	telefono = models.CharField(max_length=50, null=True, blank=True)
@@ -22,10 +22,10 @@ class Empresa(models.Model):
 		return ('%s - %s')%(self.nombre, self.cuit)
 
 class CliPro(models.Model):
-	nombre = models.CharField("Razón Social", max_length=30)
+	nombre = models.CharField("Razón Social", max_length=30, unique=True)
 	direccion = models.CharField(max_length=30)
 	telefono = models.CharField(max_length=30, null=True, blank=True)
-	cuit = models.CharField("C.U.I.T.", max_length=30)
+	cuit = models.CharField("C.U.I.T.", max_length=13, unique=True)
 	es_cliente = models.BooleanField(default=False)
 	es_proveedor = models.BooleanField(default=False)
 	iva_choices = (
@@ -70,22 +70,22 @@ class Detalle(models.Model):
 		('NC', 'Nota de Crédito'),
 		('R', 'Recibo'),
 		)
-	tipo_comprobante = models.CharField("Tipo de comprobante", max_length=2, choices= tipo_comprobante_choices, null=True)
+	tipo_comprobante = models.CharField("Comprobante", max_length=2, choices= tipo_comprobante_choices, null=True)
 	letra = models.CharField("Letra", max_length=1, null=True)
-	sucursal = models.CharField("Suc", max_length=3, null=True)
+	sucursal = models.CharField("Sucursal", max_length=3, null=True)
 	nfactura = models.CharField("N°", max_length=30, null=True)
-	cli_pro = models.ForeignKey(CliPro, null=True)
+	cli_pro = models.ForeignKey(CliPro, verbose_name="Cliente/Proveedor", null=True)
 	
-	gravado = models.DecimalField("Gravado", default=0, null=True, decimal_places=2, max_digits=6, validators=[MinValueValidator(Decimal('0.00'))])
-	no_gravado = models.DecimalField("No Gravado", default=0, null=True, decimal_places=2, max_digits=6, validators=[MinValueValidator(Decimal('0.00'))])
-	iva21 = models.DecimalField("I.V.A. 21%", default=0, null=True, decimal_places=2, max_digits=6, validators=[MinValueValidator(Decimal('0.00'))])
-	iva105= models.DecimalField("I.V.A. 10,5%", default=0, null=True, decimal_places=2, max_digits=6, validators=[MinValueValidator(Decimal('0.00'))])
-	iva_otros= models.DecimalField("Otros I.V.A.", default=0, null=True, decimal_places=2, max_digits=6, validators=[MinValueValidator(Decimal('0.00'))])
-	rg2126= models.DecimalField("R.G. 2126", default=0, null=True, decimal_places=2, max_digits=6, validators=[MinValueValidator(Decimal('0.00'))])
-	ret_IVA = models.DecimalField("Ret. I.V.A.", default=0, null=True, decimal_places=2, max_digits=6, validators=[MinValueValidator(Decimal('0.00'))])
-	ret_iibb= models.DecimalField("Ret. IIBB", default=0, null=True, decimal_places=2, max_digits=6, validators=[MinValueValidator(Decimal('0.00'))])
-	imp_int= models.DecimalField("Imp. Internos", default=0, null=True, decimal_places=2, max_digits=6, validators=[MinValueValidator(Decimal('0.00'))])
-	otros= models.DecimalField("Otros", default=0, null=True, decimal_places=2, max_digits=6, validators=[MinValueValidator(Decimal('0.00'))])
+	gravado = models.DecimalField("Gravado", default=0, null=True, decimal_places=2, max_digits=20, validators=[MinValueValidator(Decimal('0.00'))])
+	no_gravado = models.DecimalField("No Gravado", default=0, null=True, decimal_places=2, max_digits=20, validators=[MinValueValidator(Decimal('0.00'))])
+	iva21 = models.DecimalField("I.V.A. 21%", default=0, null=True, decimal_places=2, max_digits=20, validators=[MinValueValidator(Decimal('0.00'))])
+	iva105= models.DecimalField("I.V.A. 10,5%", default=0, null=True, decimal_places=2, max_digits=20, validators=[MinValueValidator(Decimal('0.00'))])
+	iva_otros= models.DecimalField("Otros I.V.A.", default=0, null=True, decimal_places=2, max_digits=20, validators=[MinValueValidator(Decimal('0.00'))])
+	rg2126= models.DecimalField("R.G. 2126", default=0, null=True, decimal_places=2, max_digits=20, validators=[MinValueValidator(Decimal('0.00'))])
+	ret_IVA = models.DecimalField("Ret. I.V.A.", default=0, null=True, decimal_places=2, max_digits=20, validators=[MinValueValidator(Decimal('0.00'))])
+	ret_iibb= models.DecimalField("Ret. IIBB", default=0, null=True, decimal_places=2, max_digits=20, validators=[MinValueValidator(Decimal('0.00'))])
+	imp_int= models.DecimalField("Imp. Internos", default=0, null=True, decimal_places=2, max_digits=20, validators=[MinValueValidator(Decimal('0.00'))])
+	otros= models.DecimalField("Otros", default=0, null=True, decimal_places=2, max_digits=20, validators=[MinValueValidator(Decimal('0.00'))])
 
 	
 	def get_absolute_url(self):
@@ -95,5 +95,5 @@ class Detalle(models.Model):
 		return ('%s - %s - %s - %s')%(self.libro, self.fecha, self.nfactura, self.cli_pro)
 
 	class Meta:
-		unique_together = ("libro", "tipo_comprobante", "nfactura")
+		unique_together = ("libro", "tipo_comprobante", "nfactura", "letra")
 

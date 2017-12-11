@@ -29,6 +29,19 @@ class CliProForm(forms.ModelForm):
 		self.helper.label_class = 'col-lg-3 col-sm-3'
 		self.helper.field_class = 'col-lg-8 col-sm-8'
 
+		self.helper.layout = Layout(
+			Field('nombre'),
+			Field('direccion'),
+			Field('telefono'),
+			Field('cuit', pattern="[0-9]{2}-[0-9]{8}-[0-9]{1}", minlength="13", placeholder="00-00000000-0"),
+			Field('es_cliente'),
+			Field('es_proveedor'),
+			Field('iva'),
+			Field('obs'),
+			)
+
+
+
 		self.helper.add_input(Submit('submit', 'Enviar', css_id="nuevo_cliente", css_class='btn-primary'))
 	
 class EmpresaForm(forms.ModelForm):
@@ -57,6 +70,15 @@ class EmpresaForm(forms.ModelForm):
 
 		self.helper.add_input(Submit('submit', 'Enviar', css_class='btn-primary'))
 		#self.helper.layout.append(Submit('save', 'save'))
+		self.helper.layout = Layout(
+			Field('nombre'),
+			Field('propietario'),
+			Field('cuit', pattern="[0-9]{2}-[0-9]{8}-[0-9]{1}", minlength="13", placeholder="00-00000000-0"),
+			Field('localidad'),
+			Field('direccion'),
+			Field('telefono'),
+			Field('directorio'),
+		)
 
 class LibroForm(forms.ModelForm):
 	class Meta:
@@ -124,7 +146,8 @@ class DetalleForm(forms.ModelForm):
 				css_class='col-sm-6',
 			),
 			Div(
-				FieldWithButtons('cli_pro', StrictButton("Agregar", css_id="esteboton", data_toggle="modal", data_target="#acpmodal")),
+				# FieldWithButtons('cli_pro', StrictButton("Agregar", css_id="esteboton", data_toggle="modal", data_target="#acpmodal")),
+				"cli_pro",
 				"letra",
 				"nfactura",
 				css_class='col-sm-6',

@@ -6,9 +6,8 @@
 	<table class="table table-hover table-condensed" align="center">
 				<thead class="theadbg">
 					<tr>
+						<th></th>
 						<th>Empresa</th>
-						<th>Modificar</th>
-						<th>Eliminar</th>
 						<th>Libro Ventas</th>
 						<th>Libro Compras</th>
 					</tr>
@@ -17,9 +16,9 @@
 				{% for key, value in object_dict_libro.items %}
 				
 				<tr>
-					<td><a href="{% url 'iva:v_empresa' key.id %}">{{ key.nombre }}</a></td>
 					<td><a href="{% url 'iva:m_empresa' key.id %}"><span class="glyphicon glyphicon-pencil"></span></td>
-					<td><a href="{% url 'iva:d_empresa' key.id %}"><span class="glyphicon glyphicon-remove"></span></td>
+					<td><a href="{% url 'iva:v_empresa' key.id %}">{{ key.nombre }}</a></td>
+					
 					<td>
 					{%if value.0.tipo_libro == 'V' %}
 						<a href="{% url 'iva:v_libro' value.0.id %}">Ver Libro Ventas</a>
@@ -40,6 +39,8 @@
 				{% endfor %}
 				</tbody>
 			</table>
+
+
 			<div align="left">
 						<a class="btn btn-default btn-md" role="button" href="{% url 'iva:a_empresa' %}">Agregar Empresa <span class="glyphicon glyphicon-plus"></span></a>
 						

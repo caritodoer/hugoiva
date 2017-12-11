@@ -27,7 +27,11 @@
 						{% endif %}
 					</dd>
 					<dt>Condicion de IVA</dt>
-					<dd>{{ instance.iva }} </dd>
+					<dd>{% if instance.iva == 'CF' %}Consumidor Final{% endif %}
+								{% if instance.iva == 'I' %}Inscripto{% endif %}
+								{% if instance.iva == 'NI' %}No Inscripto{% endif %}
+								{% if instance.iva == 'M' %}Monotributo{% endif %}
+								{% if instance.iva == 'E' %}Excento{% endif %}</dd>
 					<dt>Observaciones</dt>
 					<dd>{{ instance.obs }} </dd>
 				</dl>
@@ -44,9 +48,8 @@
 						</a>
 					</li>
 					<li>
-						<a class="btn btn-danger btn-md" role="button" href="{% url 'iva:d_cli_pro' id=instance.id %}">
-					Eliminar<span class="glyphicon glyphicon-remove"></span>
-						</a>
+						<button id="elim" class="btn btn-danger btn-md" type="button">Eliminar <span class="glyphicon glyphicon-remove"></span></button>
+						
 					</li>
 				</ul>
 			
@@ -54,4 +57,16 @@
         </div>
 	</div>
 
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript">
+$('#elim').click(function(){
+
+	if(window.confirm('Eliminacion en cascada: La siguiente operacion no se puede deshacer y afectará a todos los registros relacionados. ¿Esta seguro que desea continuar?'))
+	{
+		$(location).attr('href',"../../d_cli_pro/"+{{ instance.id }});
+		
+	}
+});
+</script>
 {% endblock %}

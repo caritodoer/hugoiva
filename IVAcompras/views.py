@@ -175,7 +175,7 @@ def imp_cli_pro(request):
 def home(request):
 	if not request.user.is_authenticated():
 		raise Http404
-	querysetCliPro=CliPro.objects.all().order_by('-id')
+	# querysetCliPro=CliPro.objects.all().order_by('-id')
 	list_emp=Empresa.objects.all().order_by('-id')
 	list_libros=Libro.objects.all()
 
@@ -194,8 +194,8 @@ def home(request):
 	print(lib_x_emp)
 
 	context = {
-		"object_list_empresa": list_emp,
-		"object_list_clipro": querysetCliPro,
+		# "object_list_empresa": list_emp,
+		# "object_list_clipro": querysetCliPro,
 		"object_dict_libro": lib_x_emp,
 		"title": "Libros IVA Ventas / Compras",
 	}	
@@ -678,26 +678,19 @@ def a_detalle(request, l=None):
 	libro = get_object_or_404(Libro, id=l)
 	instance = Detalle(libro=libro)
 	#instance.save()
-	detalle_form = DetalleForm(request.POST or None, instance=instance)
-	cliente_form = CliProForm(request.POST or None)
-	if cliente_form.is_valid():
+	form = DetalleForm(request.POST or None, instance=instance)
 	
-		if detalle_form.is_valid():
-			instance_c = cliente_form.save(commit=False)
-			instance_c.save()
-
-			instance = detalle_form.save(commit=False)
-			instance.save()
-			return HttpResponseRedirect(instance.get_absolute_url())
-		else:
-			print (detalle_form.errors)
+	if form.is_valid():
+		instance = form.save(commit=False)
+		instance.save()
+		return HttpResponseRedirect(instance.get_absolute_url())
+	else:
+		print (form.errors)
 	context = {
 		"libro": libro,
 		"title" : "Alta de Detalle",
-		"detalle_form": detalle_form,
+		"form": form,
 		"titulo2": "Alta Cliente-Proveedor",
-		"cliente_form": cliente_form,
-
 	}
 	return render(request, "altas.html", context)
 def m_detalle(request, id=None):

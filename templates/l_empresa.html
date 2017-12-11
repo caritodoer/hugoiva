@@ -29,12 +29,12 @@
 					<tbody>
 						{% for obj in object_list %}
 						<tr>
-							<td><b><a href="{{ obj.get_absolute_url }}">{{ obj.nombre }}</a></b></td>
-							<td>{{ obj.propietario }}</td>
+							<td><b><a href="{{ obj.get_absolute_url }}">{{ obj.nombre|truncatechars:25 }}</a></b></td>
+							<td>{{ obj.propietario|truncatechars:15 }}</td>
 							<td>{{ obj.cuit }}</td>
-							<td>{{ obj.localidad }}</td>
-							<td>{{ obj.direccion }}</td>
-							<td>{{ obj.telefono }}</td>
+							<td>{{ obj.localidad|truncatechars:15 }}</td>
+							<td>{{ obj.direccion|truncatechars:15 }}</td>
+							<td>{{ obj.telefono|truncatechars:18 }}</td>
 									
 						</tr>
 						{% endfor %}
