@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # third party
     'crispy_forms',
     'import_export',
+    'bootstrap3',
 
     # local apps
     'IVAcompras',

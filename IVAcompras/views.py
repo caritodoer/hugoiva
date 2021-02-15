@@ -44,12 +44,12 @@ PAGE_HEIGHT=A4[1]
 PAGE_WIDTH=A4[0]
 styles = getSampleStyleSheet()
 
-pdfmetrics.registerFont(TTFont('Existence-Light', '../IVA-modal/static/fonts/Existence-Light.ttf'))
-pdfmetrics.registerFont(TTFont('Ubuntu-B', '../IVA-modal/static/fonts/ubuntu-font-family-0.83/Ubuntu-B.ttf'))
-pdfmetrics.registerFont(TTFont('Ubuntu-L', '../IVA-modal/static/fonts/ubuntu-font-family-0.83/Ubuntu-L.ttf'))
-pdfmetrics.registerFont(TTFont('Ubuntu-M', '../IVA-modal/static/fonts/ubuntu-font-family-0.83/Ubuntu-M.ttf'))
-pdfmetrics.registerFont(TTFont('Ubuntu-C', '../IVA-modal/static/fonts/ubuntu-font-family-0.83/Ubuntu-C.ttf'))
-pdfmetrics.registerFont(TTFont('Ubuntu-R', '../IVA-modal/static/fonts/ubuntu-font-family-0.83/Ubuntu-R.ttf'))
+pdfmetrics.registerFont(TTFont('Existence/Light', 'static/fonts/Existence-Light.ttf'))
+pdfmetrics.registerFont(TTFont('Ubuntu-B', 'static/fonts/ubuntu-font-family-0.83/Ubuntu-B.ttf'))
+pdfmetrics.registerFont(TTFont('Ubuntu-L', 'static/fonts/ubuntu-font-family-0.83/Ubuntu-L.ttf'))
+pdfmetrics.registerFont(TTFont('Ubuntu-M', 'static/fonts/ubuntu-font-family-0.83/Ubuntu-M.ttf'))
+pdfmetrics.registerFont(TTFont('Ubuntu-C', 'static/fonts/ubuntu-font-family-0.83/Ubuntu-C.ttf'))
+pdfmetrics.registerFont(TTFont('Ubuntu-R', 'static/fonts/ubuntu-font-family-0.83/Ubuntu-R.ttf'))
 
 styles.add(ParagraphStyle(name='tit2', alignment=TA_CENTER, fontName = "Ubuntu-M", fontSize = 14))
 styles.add(ParagraphStyle(name='tit1', alignment=TA_CENTER, fontName = "Existence-Light", fontSize = 16))
@@ -64,36 +64,36 @@ tablas = styles["tablas"]
 textos = styles["textos"]
 
 LIST_STYLE = TableStyle(
-	[('GRID', (0,0), (17, -1), 1, colors.dodgerblue),
-	('BACKGROUND', (0,0), (-1, 0), colors.dodgerblue),
-	('FONT', (0,0), (-1, -1), 'Ubuntu-C', 10)]
+    [('GRID', (0,0), (17, -1), 1, colors.dodgerblue),
+    ('BACKGROUND', (0,0), (-1, 0), colors.dodgerblue),
+    ('FONT', (0,0), (-1, -1), 'Ubuntu-C', 10)]
 )
 # fin reportlab
 
 # Create your views here.
 def usuarios(request):
-	if not request.user.is_authenticated():
-		raise Http404
-	queryset = User.objects.all()
-	context = {
-		
-		"object_list": queryset,
-		"title": "Usuarios"
-	}
-	return render(request, "usuarios.html", context)
+    if not request.user.is_authenticated():
+        raise Http404
+    queryset = User.objects.all()
+    context = {
+        "object_list": queryset,
+        "title": "Usuarios"
+    }
+    return render(request, "usuarios.html", context)
 
 def exp_empresa(request):
-	if not request.user.is_authenticated():
-		raise Http404
-	empresa_resource = EmpresaResource()
-	dataset = empresa_resource.export()
-	# para que guarde como csv: se puede abrir con excel 
-	response = HttpResponse(dataset.xls, content_type='text/xls')
-	response['Content-Disposition'] = 'attachment; filename="empresa.xls"'
-	# para que guarde como json
-	#response = HttpResponse(dataset.json, content_type='application/json')
-	#response['Content-Disposition'] = 'attachment; filename="persons.json"'
-	return response
+    if not request.user.is_authenticated():
+        raise Http404
+    empresa_resource = EmpresaResource()
+    dataset = empresa_resource.export()
+    # para que guarde como csv: se puede abrir con excel 
+    response = HttpResponse(dataset.xls, content_type='text/xls')
+    response['Content-Disposition'] = 'attachment; filename="empresa.xls"'
+    # para que guarde como json
+    #response = HttpResponse(dataset.json, content_type='application/json')
+    #response['Content-Disposition'] = 'attachment; filename="persons.json"'
+    return response
+
 def imp_empresa(request):
     if not request.user.is_authenticated():
         raise Http404
@@ -109,8 +109,8 @@ def imp_empresa(request):
             empresa_resource.import_data(dataset, dry_run=False)  # Actually import now
             return redirect("iva:l_empresa")
     context = {
-    	"title": "Importar Empresa",
-	}
+         "title": "Importar Empresa",
+    }
     return render(request, 'importar.html', context)
 
 def exp_cli_pro(request):
@@ -125,6 +125,7 @@ def exp_cli_pro(request):
     #response = HttpResponse(dataset.json, content_type='application/json')
     #response['Content-Disposition'] = 'attachment; filename="persons.json"'
     return response
+
 def imp_cli_pro(request):
     if not request.user.is_authenticated():
         raise Http404
@@ -140,8 +141,8 @@ def imp_cli_pro(request):
             CliPro_resource.import_data(dataset, dry_run=False)  # Actually import now
             return redirect("iva:l_cli_pro")
     context = {
-    	"title": "Importar Cliente-Proveedor",
-	}
+        "title": "Importar Cliente-Proveedor",
+    }
     return render(request, 'importar.html', context)
 
 # def exp_detalle(request):
