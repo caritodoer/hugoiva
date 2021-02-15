@@ -1,7 +1,7 @@
 asgiref==3.3.1
 defusedxml==0.6.0
 diff-match-patch==20200713
-Django==1.10
+Django==1.11.29
 django-crispy-forms==1.11.0
 django-import-export==0.6.0
 et-xmlfile==1.0.1
