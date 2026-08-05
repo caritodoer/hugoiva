@@ -1,7 +1,15 @@
+# Requisitos actualizados para Python 3.8 (ver .python-version) en macOS arm64.
+# Los pines originales estan en OLD_requirements.txt; los cambios son:
+#   Django    1.10  -> 1.11.29  (1.10 no arranca en Python >= 3.6: __classcell__)
+#   Pillow    8.1.0 -> 9.5.0    (sin wheel arm64/py3.8; reportlab 3.6 exige pillow>=9)
+#   PyYAML    5.4.1 -> 6.0.1    (5.4.1 no compila con setuptools/Cython actuales)
+#   reportlab 3.4.0 -> 3.6.13   (3.4.0 no compila con clang actual en arm64)
+#   django-bootstrap3           (faltaba, pero settings.py lo usa en INSTALLED_APPS)
 asgiref==3.3.1
 defusedxml==0.6.0
 diff-match-patch==20200713
-Django==1.10
+Django==1.11.29
+django-bootstrap3==12.0.3
 django-crispy-forms==1.11.0
 django-import-export==0.6.0
 et-xmlfile==1.0.1
@@ -9,10 +17,10 @@ jdcal==1.4.1
 MarkupPy==1.14
 odfpy==1.4.1
 openpyxl==3.0.6
-Pillow==8.1.0
+Pillow==9.5.0
 pytz==2021.1
-PyYAML==5.4.1
-reportlab==3.4.0
+PyYAML==6.0.1
+reportlab==3.6.13
 sqlparse==0.4.1
 tablib==3.0.0
 xlrd==2.0.1
