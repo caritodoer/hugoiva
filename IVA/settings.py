@@ -12,20 +12,42 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 
+from django.core.exceptions import ImproperlyConfigured
+from dotenv import load_dotenv
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Carga las variables del archivo .env (no versionado). Tiene que ejecutarse
+# antes de leer cualquier variable de entorno. Ver .env.example y el README.
+load_dotenv(os.path.join(BASE_DIR, '.env'))
+
+
+def variable_de_entorno(nombre, por_defecto=None):
+    """Devuelve la variable de entorno `nombre`, o falla con un mensaje claro."""
+    valor = os.environ.get(nombre, por_defecto)
+    if valor is None:
+        raise ImproperlyConfigured(
+            "Falta la variable de entorno {0}. Copia .env.example a .env "
+            "y revisa el README.".format(nombre)
+        )
+    return valor
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'jd-9!^8hnnc3h%7n$0iltv=8db4%4+5w1wtxq9h)*zj!p-5@cr'
+SECRET_KEY = variable_de_entorno('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Las variables de entorno siempre son texto: bool('False') seria True.
+DEBUG = variable_de_entorno('DJANGO_DEBUG', 'False').lower() in ('true', '1', 'yes')
 
-ALLOWED_HOSTS = []
+# Con DEBUG=False Django exige hosts explicitos. Formato: "host1,host2".
+ALLOWED_HOSTS = [
+    h.strip() for h in os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(',') if h.strip()
+]
 
 
 # Application definition

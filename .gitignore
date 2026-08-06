@@ -53,6 +53,10 @@ coverage.xml
 # Django stuff:
 *.log
 local_settings.py
+# La base de datos se reconstruye con: migrate + loaddata datos_demo
+db.sqlite3
+# Generado por collectstatic
+static_root/
 
 # Flask stuff:
 instance/
