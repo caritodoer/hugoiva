@@ -7,6 +7,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import authenticate, get_user_model, login, logout
 from datetime import datetime, date, time, timedelta
 import calendar
+from functools import wraps
 User = get_user_model()
 """
 vistas:
@@ -70,10 +71,22 @@ LIST_STYLE = TableStyle(
 )
 # fin reportlab
 
+
+def require_auth(f):
+    @wraps(f)
+    def funcion_decorada(request, *args, **kwargs):
+        if not request.user.is_authenticated():
+            raise Http404
+        return f(request, *args, **kwargs)
+
+    return funcion_decorada
+
+
+
 # Create your views here.
+@require_auth
 def usuarios(request):
-    if not request.user.is_authenticated():
-        raise Http404
+    
     queryset = User.objects.all()
     context = {
         "object_list": queryset,
@@ -81,9 +94,8 @@ def usuarios(request):
     }
     return render(request, "usuarios.html", context)
 
+@require_auth
 def exp_empresa(request):
-    if not request.user.is_authenticated():
-        raise Http404
     empresa_resource = EmpresaResource()
     dataset = empresa_resource.export()
     # para que guarde como csv: se puede abrir con excel 
@@ -94,9 +106,8 @@ def exp_empresa(request):
     #response['Content-Disposition'] = 'attachment; filename="persons.json"'
     return response
 
-def imp_empresa(request):
-    if not request.user.is_authenticated():
-        raise Http404
+@require_auth
+def imp_empresa(request): 
     if request.method == 'POST':
         empresa_resource = EmpresaResource()
         dataset = Dataset()
@@ -113,9 +124,8 @@ def imp_empresa(request):
     }
     return render(request, 'importar.html', context)
 
+@require_auth
 def exp_cli_pro(request):
-    if not request.user.is_authenticated():
-        raise Http404
     CliPro_resource = CliProResource()
     dataset = CliPro_resource.export()
     # para que guarde como csv: se puede abrir con excel 
@@ -126,9 +136,8 @@ def exp_cli_pro(request):
     #response['Content-Disposition'] = 'attachment; filename="persons.json"'
     return response
 
+@require_auth
 def imp_cli_pro(request):
-    if not request.user.is_authenticated():
-        raise Http404
     if request.method == 'POST':
         CliPro_resource = CliProResource()
         dataset = Dataset()
@@ -145,38 +154,9 @@ def imp_cli_pro(request):
     }
     return render(request, 'importar.html', context)
 
-# def exp_detalle(request):
-#     detalle_resource = DetalleResource()
-#     dataset = detalle_resource.export()
-#     # para que guarde como csv: se puede abrir con excel 
-#     response = HttpResponse(dataset.xls, content_type='text/xls')
-#     response['Content-Disposition'] = 'attachment; filename="libro.xls"'
-#     # para que guarde como json
-#     #response = HttpResponse(dataset.json, content_type='application/json')
-#     #response['Content-Disposition'] = 'attachment; filename="persons.json"'
-#     return response
-# def imp_detalle(request):
-#     if request.method == 'POST':
-#         detalle_resource = DetalleResource()
-#         dataset = Dataset()
-#         new_detalle = request.FILES['myfile']
 
-#         imported_data = dataset.load(new_detalle.read(), "xls")
-
-#         result = detalle_resource.import_data(dataset, dry_run=True)  # Test the data import
-#         if not result.has_errors():
-#             detalle_resource.import_data(dataset, dry_run=False)  # Actually import now
-#             return redirect("iva:l_libro")
-#     context = {
-#     	"title": "Importar Libro",
-# 	}
-#     return render(request, 'importar.html', context)
-
-
+@require_auth
 def home(request):
-	if not request.user.is_authenticated():
-		raise Http404
-	# querysetCliPro=CliPro.objects.all().order_by('-id')
 	list_emp=Empresa.objects.all().order_by('-id')
 	list_libros=Libro.objects.all()
 
@@ -192,20 +172,16 @@ def home(request):
 				if l.tipo_libro == 'C':
 					list_lxe[1]=l
 		lib_x_emp[k]=list_lxe	
-	print(lib_x_emp)
 
 	context = {
-		# "object_list_empresa": list_emp,
-		# "object_list_clipro": querysetCliPro,
 		"object_dict_libro": lib_x_emp,
 		"title": "Libros IVA Ventas / Compras",
 	}	
 	return render(request, "home.html", context)
 
 # EMPRESA
+@require_auth
 def l_empresa(request):
-	if not request.user.is_authenticated():
-		raise Http404
 	queryset = Empresa.objects.all().order_by('id')
 	query = request.GET.get("q")
 	if query:
@@ -229,9 +205,9 @@ def l_empresa(request):
 		"title": "Empresas"
 	}
 	return render(request, "l_empresa.html", context)
+
+@require_auth
 def a_empresa(request):
-	if not request.user.is_authenticated():
-		raise Http404
 	form = EmpresaForm(request.POST or None)
 	if form.is_valid():
 		instance = form.save(commit=False)
@@ -247,9 +223,9 @@ def a_empresa(request):
 		"form": form,
 	}
 	return render(request, "altas.html", context)
+
+@require_auth
 def m_empresa(request, id=None):
-	if not request.user.is_authenticated():
-		raise Http404
 	instance = get_object_or_404(Empresa, id=id)
 	form = EmpresaForm(request.POST or None, instance=instance)
 	if form.is_valid():
@@ -265,27 +241,26 @@ def m_empresa(request, id=None):
 		"form" : form,
 	}
 	return render(request, "altas.html", context)
+
+@require_auth
 def v_empresa(request, id=None):
-	if not request.user.is_authenticated():
-		raise Http404
 	instance = get_object_or_404(Empresa, id=id)
 	context = {
 		"instance" : instance,
 		"title": "Detalle de Empresa",
 	}
 	return render(request, "v_empresa.html", context)
+
+@require_auth
 def d_empresa(request, id=None):
-	if not request.user.is_authenticated():
-		raise Http404
 	instance = get_object_or_404(Empresa, id=id)
 	instance.delete()
 	return redirect("iva:home")
 
 
 # Cliente/Proveedor
+@require_auth
 def l_cli_pro(request):
-	if not request.user.is_authenticated():
-		raise Http404
 	queryset = CliPro.objects.all().order_by('id')
 	
 	query = request.GET.get("q")
@@ -310,9 +285,9 @@ def l_cli_pro(request):
 		"title": "Clientes-Proveedores"
 	}
 	return render(request, "l_cli_pro.html", context)
+
+@require_auth
 def a_cli_pro(request):
-	if not request.user.is_authenticated():
-		raise Http404
 	form = CliProForm(request.POST or None)
 	if form.is_valid():
 		instance = form.save(commit=False)
@@ -326,9 +301,9 @@ def a_cli_pro(request):
 		"form": form,
 	}
 	return render(request, "altas.html", context)
+
+@require_auth
 def m_cli_pro(request, id=None):
-	if not request.user.is_authenticated():
-		raise Http404
 	instance = get_object_or_404(CliPro, id=id)
 	form = CliProForm(request.POST or None, instance=instance)
 	if form.is_valid():
@@ -344,26 +319,25 @@ def m_cli_pro(request, id=None):
 		"url": "/l_cli_pro",
 	}
 	return render(request, "altas.html", context)
+
+@require_auth
 def v_cli_pro(request, id=None):
-	if not request.user.is_authenticated():
-		raise Http404
 	instance = get_object_or_404(CliPro, id=id)
 	context = {
 		"instance" : instance,
 		"title": "Detalle de Cliente/Proveedor",
 	}
 	return render(request, "v_cli_pro.html", context)
+
+@require_auth
 def d_cli_pro(request, id=None):
-	if not request.user.is_authenticated():
-		raise Http404
 	instance = get_object_or_404(CliPro, id=id)
 	instance.delete()
 	return redirect("iva:home")
 
 # Libro 
+@require_auth
 def i_dgr(request, id=None):
-	if not request.user.is_authenticated():
-		raise Http404
 	instance = get_object_or_404(Libro, id=id)
 	if instance.tipo_libro == "V":
 		tipo_libro="Libro Ventas"
@@ -372,8 +346,6 @@ def i_dgr(request, id=None):
 	
 	mes = request.GET.get("m")
 	anio = request.GET.get("a")
-	print(mes)
-	print(anio)
 	if mes and anio:
 		list_detalle = Detalle.objects.filter(libro=instance, fecha__year=anio, fecha__month=mes)
 		
@@ -404,11 +376,6 @@ def i_dgr(request, id=None):
 				+"""<br/><b>Directorio: </b>"""+instance.empresa.directorio, styles["Normal"]) 
 			Story.append(empresa)
 			Story.append(Spacer(1, 12))
-
-			
-			# fm=str(mes)
-			# fa=str(anio)
-			# ft=fm+" - "+fa
 			
 
 			fecha = Paragraph("""<b>Periodo: </b>"""+mes+""" - """+anio, styles["Normal"]) 
@@ -422,11 +389,6 @@ def i_dgr(request, id=None):
 				subtotal=r.gravado+r.no_gravado+r.iva21+r.iva105+r.iva_otros+r.rg2126+r.ret_IVA+r.ret_iibb+r.imp_int+r.otros
 				total = total+subtotal
 
-				# f=str(r.fecha)
-				# s=str(subtotal)
-				# fecha = Paragraph("""<b>Fecha: </b>"""+f+""" - Subtotal: """+s, styles["Normal"]) 
-				# Story.append(fecha)
-				# Story.append(Spacer(1, 12))
 
 			tt=str(total)
 			tot = Paragraph("""<b>Total: $</b>"""+tt, styles["Normal"])  
@@ -443,15 +405,13 @@ def i_dgr(request, id=None):
 		return response
 	
 	context = {
-		# "desde": desde,
-		# "hasta": hasta,
 		"instance": instance,
 		"title": "Informe DGR",
 	}
 	return render(request, "i_dgr.html", context)
+
+@require_auth
 def i_libro(request, id=None):
-	if not request.user.is_authenticated():
-		raise Http404
 	instance = get_object_or_404(Libro, id=id)
 	if instance.tipo_libro == "V":
 		tipo_libro="Libro Ventas"
@@ -524,14 +484,10 @@ def i_libro(request, id=None):
 
 				
 				allregistros.append(registro)
-				#print(allregistros)
 			t = Table([headings] + allregistros)
 			t.setStyle(LIST_STYLE)
-			# print(len(headings))
-			# t._argW[0]=1*inch
-			# for i in range (0,len(headings)):
-			# 	t._argW[i]=0.5*inch
-			# # t._argW[3]=5.5*inch
+			
+            
 			Story.append(t)
 			Story.append(Spacer(1, 12))
 			return Story
@@ -545,25 +501,21 @@ def i_libro(request, id=None):
 		return response
 
 	context = {
-		# "desde": desde,
-		# "hasta": hasta,
 		"instance": instance,
 		"title": "Imprimir Libro",
 	}
 	return render(request, "i_libro.html", context)
+
+@require_auth
 def a_libro(request, k=None, v=None):
-	if not request.user.is_authenticated():
-		raise Http404
 	empresa = get_object_or_404(Empresa, id=k)
 	tipo_libro = v
-	print(empresa)
-	print(tipo_libro)
 	instance = Libro(empresa=empresa, tipo_libro=tipo_libro)
 	instance.save()
 	return HttpResponseRedirect(instance.get_absolute_url())
+
+@require_auth
 def m_libro(request, id=None):
-	if not request.user.is_authenticated():
-		raise Http404
 	instance = get_object_or_404(Libro, id=id)
 	form = LibroForm(request.POST or None, instance=instance)
 	if form.is_valid():
@@ -578,27 +530,22 @@ def m_libro(request, id=None):
 		"form" : form,
 	}
 	return render(request, "altas.html", context)
+
+@require_auth
 def v_libro(request, id=None):
-	if not request.user.is_authenticated():
-		raise Http404
 	instance = get_object_or_404(Libro, id=id)
 	list_detalle = Detalle.objects.all().order_by('-fecha', '-tipo_comprobante', 'letra', '-nfactura').filter(libro=instance)
 	imp_x_det={}
 	for d in list_detalle:
 		importe=d.gravado+d.no_gravado+d.iva21+d.iva105+d.iva_otros+d.rg2126+d.ret_IVA+d.ret_iibb+d.imp_int+d.otros
 		imp_x_det[d.id]=importe
-	print(imp_x_det)
-	# print(list_detalle)
 
 
 	desde = request.GET.get("d")
 	hasta = request.GET.get("h")
-	print(desde)
-	print(hasta)
+
 	if desde and hasta:
-		# list_detalle = list_detalle.filter(sucursal__icontains=query)
 		list_detalle = list_detalle.filter(fecha__range=(desde, hasta))
-		print(list_detalle)
 
 
 	paginator = Paginator(list_detalle, 10) # Show 25 DetAna_queryset per page
@@ -617,16 +564,14 @@ def v_libro(request, id=None):
 		"page_request_var": page_request_var,
 		"object_list": queryset_list,
 		"list_detalle": queryset_list,
-		# "list_detalle": list_detalle,
 		"imp_x_det": imp_x_det,
 		"instance" : instance,
 		"title": "Libro",
 	}
 	return render(request, "v_libro.html", context)
-def l_libro(request):
-	if not request.user.is_authenticated():
-		raise Http404
-	
+
+@require_auth
+def l_libro(request):	
 	list_emp=Empresa.objects.all().order_by('-id')
 	list_libros=Libro.objects.all()
 
@@ -642,7 +587,6 @@ def l_libro(request):
 				if l.tipo_libro == 'C':
 					list_lxe[1]=l
 		lib_x_emp[k]=list_lxe	
-	print(lib_x_emp)
 
 	context = {
 		"object_list_empresa": list_emp,
@@ -651,33 +595,15 @@ def l_libro(request):
 		"title": "Listado de Libros"
 	}
 	return render(request, "l_libro.html", context)
+
+@require_auth
 def d_libro(request, id=None):
-	if not request.user.is_authenticated():
-		raise Http404
 	instance = get_object_or_404(Libro, id=id)
 	instance.delete()
 	return redirect("iva:home")
 
-# Detalle 
-# def a_cp_modal(request):
-# 	if not request.user.is_authenticated():
-# 		raise Http404
-# 	form = CliProForm(request.POST or None)
-# 	if form.is_valid():
-# 		instance = form.save(commit=False)
-# 		instance.save()
-# 		return HttpResponseRedirect(instance.get_absolute_url())
-# 	else:
-# 		print (form.errors)
-# 	context = {
-# 		"title" : "Alta de Cliente/Proveedor",
-# 		"form": form,
-# 	}
-# 	return render(request, "a_cp_modal.html", context)
-
+@require_auth
 def a_detalle(request, l=None):
-	if not request.user.is_authenticated():
-		raise Http404
 	libro = get_object_or_404(Libro, id=l)
 	instance = Detalle(libro=libro)
 	#instance.save()
@@ -697,9 +623,9 @@ def a_detalle(request, l=None):
 		"url": "/v_libro/"+l,
 	}
 	return render(request, "altas.html", context)
+
+@require_auth
 def m_detalle(request, id=None):
-	if not request.user.is_authenticated():
-		raise Http404
 	instance = get_object_or_404(Detalle, id=id)
 	form = DetalleForm(request.POST or None, instance=instance)
 	if form.is_valid():
@@ -716,9 +642,9 @@ def m_detalle(request, id=None):
 		"url": "/v_libro/"+l,
 	}
 	return render(request, "altas.html", context)
+
+@require_auth
 def v_detalle(request, id=None):
-	if not request.user.is_authenticated():
-		raise Http404
 	instance = get_object_or_404(Detalle, id=id)
 	objeto = DetalleForm(data=model_to_dict(Detalle.objects.get(id=id), exclude=["libro"]))
 	context = {
@@ -727,18 +653,11 @@ def v_detalle(request, id=None):
 		"objeto": objeto,
 	}
 	return render(request, "v_detalle.html", context)
-def l_detalle(request):
-	if not request.user.is_authenticated():
-		raise Http404
-	queryset = Detalle.objects.all().order_by('id')
-	context = {
-		"object_list": queryset,
-		"title": "Listado de Detalles"
-	}
-	return render(request, "l_detalle.html", context)
+
+
+
+@require_auth
 def d_detalle(request, id=None):
-	if not request.user.is_authenticated():
-		raise Http404
 	instance = get_object_or_404(Detalle, id=id)
 	id_libro = instance.libro.id
 	instance.delete()

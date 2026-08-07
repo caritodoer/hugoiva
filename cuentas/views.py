@@ -5,14 +5,12 @@ from .forms import UserLoginForm, UserRegisterForm
 
 def login_view(request):
 	title = 'Bienvenido'
-	#print(request.user.is_authenticated())
 	form = UserLoginForm(request.POST or None)
 	if form.is_valid():
 		username = form.cleaned_data.get("username")
 		password = form.cleaned_data.get("password")
 		user = authenticate(username=username, password=password)
 		login(request, user)
-		#print(request.user.is_authenticated())
 		if request.user.is_authenticated:
 			return redirect("/home")
 	context = {
@@ -22,7 +20,6 @@ def login_view(request):
 	return render(request, "login_form.html", context)
 
 def register_view(request):
-	print(request.user.is_authenticated())
 	title = "Registrar Usuario"
 	form = UserRegisterForm(request.POST or None)
 	if form.is_valid():
@@ -31,8 +28,6 @@ def register_view(request):
 		user.set_password(password)
 		user.save()
 
-		#new_user = authenticate(username=user.username, password=password)
-		#login(request, user)
 		return redirect("/usuarios")
 
 	context = {
