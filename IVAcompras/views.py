@@ -7,6 +7,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import  get_user_model
 from datetime import datetime
 from functools import wraps
+from cuentas.decorators import require_auth
 
 User = get_user_model()
 """
@@ -65,14 +66,7 @@ LIST_STYLE = TableStyle(
 # fin reportlab
 
 
-def require_auth(f):
-    @wraps(f)
-    def funcion_decorada(request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            raise Http404
-        return f(request, *args, **kwargs)
 
-    return funcion_decorada
 
 
 

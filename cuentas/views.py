@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from .forms import UserLoginForm, UserRegisterForm
-from django.views.decorators.http import require_auth
+from cuentas.decorators import require_auth
+
 # Create your views here.
 
 def login_view(request):
