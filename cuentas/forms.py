@@ -1,9 +1,7 @@
 from django import forms
-from django.contrib.auth import authenticate, get_user_model, login, logout
+from django.contrib.auth import authenticate, get_user_model
 from crispy_forms.helper import FormHelper
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, Fieldset, Div, Field, ButtonHolder
-from crispy_forms.bootstrap import StrictButton, FieldWithButtons, PrependedText, PrependedAppendedText, FormActions
+from crispy_forms.layout import Submit
 
 User = get_user_model()
 

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, get_user_model, login, logout
+from django.contrib.auth import authenticate, login, logout
 from .forms import UserLoginForm, UserRegisterForm
+from django.views.decorators.http import require_auth
 # Create your views here.
 
 def login_view(request):
@@ -19,6 +20,7 @@ def login_view(request):
 	}
 	return render(request, "login_form.html", context)
 
+@require_auth
 def register_view(request):
 	title = "Registrar Usuario"
 	form = UserRegisterForm(request.POST or None)

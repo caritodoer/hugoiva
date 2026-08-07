@@ -2,7 +2,7 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Fieldset, Div, Field, ButtonHolder
 from crispy_forms.bootstrap import StrictButton, FieldWithButtons, PrependedText, PrependedAppendedText, FormActions
-from .models import *
+from .models import CliPro, Empresa, Libro, Detalle
 
 class CliProForm(forms.ModelForm):
 	class Meta:

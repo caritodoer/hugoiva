@@ -1,13 +1,13 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import *
-from .forms import *
+from .models import Empresa, CliPro, Libro, Detalle
+from .forms import CliProForm, EmpresaForm, LibroForm, DetalleForm
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.forms.models import model_to_dict
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.contrib.auth import authenticate, get_user_model, login, logout
-from datetime import datetime, date, time, timedelta
-import calendar
+from django.contrib.auth import  get_user_model
+from datetime import datetime
 from functools import wraps
+
 User = get_user_model()
 """
 vistas:
@@ -19,27 +19,20 @@ vistas:
 y periodo
 - previsualizacion de la hoja del libro 
 """
-from .resources import *
+from .resources import EmpresaResource, CliProResource
 from tablib import Dataset
 
 # inicio reportlab
-from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponseRedirect, HttpResponse, Http404, JsonResponse
 from reportlab.pdfgen import canvas
-from reportlab.lib.units import cm, inch
+from reportlab.lib.units import inch
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib import colors
-from reportlab.lib.colors import pink, green, brown, white, black, magenta, red
-import time
-from reportlab.lib.enums import *
-from reportlab.lib.pagesizes import letter, A4,landscape
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, PageBreak, TableStyle, Table
+from reportlab.lib.enums import TA_CENTER, TA_LEFT
+from reportlab.lib.pagesizes import A4,landscape
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, TableStyle, Table
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from io import BytesIO
-
-from django.views.generic import ListView
-from reportlab.lib.utils import ImageReader
 
 PAGE_HEIGHT=A4[1]
 PAGE_WIDTH=A4[0]
@@ -75,7 +68,7 @@ LIST_STYLE = TableStyle(
 def require_auth(f):
     @wraps(f)
     def funcion_decorada(request, *args, **kwargs):
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             raise Http404
         return f(request, *args, **kwargs)
 
