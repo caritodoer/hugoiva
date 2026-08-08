@@ -1,12 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Empresa, CliPro, Libro, Detalle
 from .forms import CliProForm, EmpresaForm, LibroForm, DetalleForm
-from django.http import HttpResponseRedirect, HttpResponse, Http404
+from django.http import HttpResponseRedirect, HttpResponse
 from django.forms.models import model_to_dict
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import  get_user_model
-from datetime import datetime
-from functools import wraps
 from cuentas.decorators import require_auth
 
 User = get_user_model()

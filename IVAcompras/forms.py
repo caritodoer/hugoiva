@@ -1,7 +1,7 @@
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Fieldset, Div, Field, ButtonHolder
-from crispy_forms.bootstrap import StrictButton, FieldWithButtons, PrependedText, PrependedAppendedText, FormActions
+from crispy_forms.bootstrap import  PrependedText
 from .models import CliPro, Empresa, Libro, Detalle
 
 class CliProForm(forms.ModelForm):
@@ -146,7 +146,6 @@ class DetalleForm(forms.ModelForm):
 				css_class='col-sm-6',
 			),
 			Div(
-				# FieldWithButtons('cli_pro', StrictButton("Agregar", css_id="esteboton", data_toggle="modal", data_target="#acpmodal")),
 				"cli_pro",
 				"letra",
 				"nfactura",
@@ -177,15 +176,6 @@ class DetalleForm(forms.ModelForm):
 			ButtonHolder(
 				Submit('submit', 'Enviar', css_class='btn-primary pull-right')
 			)
-			# PrependedAppendedText('gravado', '$','.00')
 		)
 
-		# self.helper[3:5].wrap_together(Div, css_class='grupo1')
-		# self.helper['tipo_comprobante'].wrap(Field, wrapper_class='tipocomprobante')
-		# self.helper['letra'].wrap(Field, wrapper_class='letra')
-		
-		# self.helper[7:16].wrap_together(Fieldset, 'Otros Valores')
-
-		#self.helper.add_input(Submit('submit', 'Enviar', css_class='btn-primary'))
-		
-
+	
