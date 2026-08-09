@@ -37,7 +37,7 @@ urlpatterns = [
 	# Libro
 	url(r'^a_libro/(?P<k>[^/]+)/(?P<v>[^/]+)/$', views.a_libro, name='a_libro'),
 	url(r'^i_libro/(?P<id>\d+)/$', views.i_libro, name='i_libro'),
-	url(r'^m_libro/(?P<id>\d+)/$', views.m_libro),
+	url(r'^m_libro/(?P<id>\d+)/$', views.m_libro, name='m_libro'),
 	url(r'^v_libro/(?P<id>\d+)/$', views.v_libro, name='v_libro'),
 	url(r'^d_libro/(?P<id>\d+)/$', views.d_libro, name='d_libro'),
 	url(r'^l_libro/$', views.l_libro, name='l_libro'),
