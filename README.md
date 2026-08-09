@@ -191,3 +191,13 @@ templates/    plantillas HTML
 static/       CSS, JavaScript e imágenes
 locale/       traducciones
 ```
+
+---
+
+## Tests
+
+Para correr los tests:
+
+- `python manage.py test` (todo),
+- `python manage.py test IVAcompras` (una app),
+- `python manage.py test -v 2` (detalle de cada test).
