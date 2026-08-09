@@ -14,7 +14,7 @@ def login_view(request):
 		user = authenticate(username=username, password=password)
 		login(request, user)
 		if request.user.is_authenticated:
-			return redirect("/home")
+			return redirect("iva:home")
 	context = {
 		"title": title,
 		"form": form, 

@@ -37,7 +37,7 @@ PAGE_HEIGHT=A4[1]
 PAGE_WIDTH=A4[0]
 styles = getSampleStyleSheet()
 
-pdfmetrics.registerFont(TTFont('Existence/Light', 'static/fonts/Existence-Light.ttf'))
+pdfmetrics.registerFont(TTFont('Existence-Light', 'static/fonts/Existence-Light.ttf'))
 pdfmetrics.registerFont(TTFont('Ubuntu-B', 'static/fonts/ubuntu-font-family-0.83/Ubuntu-B.ttf'))
 pdfmetrics.registerFont(TTFont('Ubuntu-L', 'static/fonts/ubuntu-font-family-0.83/Ubuntu-L.ttf'))
 pdfmetrics.registerFont(TTFont('Ubuntu-M', 'static/fonts/ubuntu-font-family-0.83/Ubuntu-M.ttf'))
