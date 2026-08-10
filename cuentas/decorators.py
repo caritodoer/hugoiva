@@ -1,6 +1,7 @@
 from functools import wraps
 from django.http import Http404
 
+
 def require_auth(f):
     @wraps(f)
     def funcion_decorada(request, *args, **kwargs):
