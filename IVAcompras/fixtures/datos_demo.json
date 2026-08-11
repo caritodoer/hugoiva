@@ -1,0 +1,317 @@
+[
+  {
+    "model": "IVAcompras.empresa",
+    "pk": 40,
+    "fields": {
+      "nombre": "H.C. SRL",
+      "propietario": "H.C.",
+      "cuit": "30-12312312-3",
+      "localidad": "Río Grande",
+      "direccion": "Calle Rosas 123",
+      "telefono": "444111",
+      "directorio": "H.C."
+    }
+  },
+  {
+    "model": "IVAcompras.clipro",
+    "pk": 5,
+    "fields": {
+      "nombre": "Librería juvenil",
+      "direccion": "Calle San Martín 1234",
+      "telefono": "",
+      "cuit": "30-12121212-0",
+      "es_cliente": false,
+      "es_proveedor": true,
+      "iva": "I",
+      "obs": "Librería"
+    }
+  },
+  {
+    "model": "IVAcompras.clipro",
+    "pk": 6,
+    "fields": {
+      "nombre": "Impresoras I.C. SRL",
+      "direccion": "Calle Mayor 123",
+      "telefono": "",
+      "cuit": "30-13131313-1",
+      "es_cliente": false,
+      "es_proveedor": true,
+      "iva": "I",
+      "obs": "Prod. de Oficina"
+    }
+  },
+  {
+    "model": "IVAcompras.clipro",
+    "pk": 7,
+    "fields": {
+      "nombre": "Juan Perez",
+      "direccion": "Av. Principal 765",
+      "telefono": "",
+      "cuit": "12-34567890-1",
+      "es_cliente": true,
+      "es_proveedor": false,
+      "iva": "CF",
+      "obs": "Profesional independiente"
+    }
+  },
+  {
+    "model": "IVAcompras.clipro",
+    "pk": 8,
+    "fields": {
+      "nombre": "Lamberti",
+      "direccion": "San Martin 1234",
+      "telefono": "422525",
+      "cuit": "23-23232323-0",
+      "es_cliente": false,
+      "es_proveedor": true,
+      "iva": "CF",
+      "obs": "Cta. Cte."
+    }
+  },
+  {
+    "model": "IVAcompras.clipro",
+    "pk": 9,
+    "fields": {
+      "nombre": "Acuarela",
+      "direccion": "Calle Colores 1234",
+      "telefono": "",
+      "cuit": "11-11011011-0",
+      "es_cliente": false,
+      "es_proveedor": true,
+      "iva": "I",
+      "obs": "Art. Librería"
+    }
+  },
+  {
+    "model": "IVAcompras.clipro",
+    "pk": 28,
+    "fields": {
+      "nombre": "José Sánchez",
+      "direccion": "Calle Paloma 1234",
+      "telefono": "",
+      "cuit": "20-20202020-0",
+      "es_cliente": true,
+      "es_proveedor": false,
+      "iva": "CF",
+      "obs": ""
+    }
+  },
+  {
+    "model": "IVAcompras.libro",
+    "pk": 29,
+    "fields": {
+      "empresa": 40,
+      "tipo_libro": "V"
+    }
+  },
+  {
+    "model": "IVAcompras.libro",
+    "pk": 30,
+    "fields": {
+      "empresa": 40,
+      "tipo_libro": "C"
+    }
+  },
+  {
+    "model": "IVAcompras.detalle",
+    "pk": 43,
+    "fields": {
+      "libro": 29,
+      "fecha": "2017-12-01",
+      "tipo_comprobante": "F",
+      "letra": "C",
+      "sucursal": "1",
+      "nfactura": "1",
+      "cli_pro": 7,
+      "gravado": "4356.00",
+      "no_gravado": "0.00",
+      "iva21": "0.00",
+      "iva105": "0.00",
+      "iva_otros": "0.00",
+      "rg2126": "0.00",
+      "ret_IVA": "0.00",
+      "ret_iibb": "0.00",
+      "imp_int": "0.00",
+      "otros": "0.00"
+    }
+  },
+  {
+    "model": "IVAcompras.detalle",
+    "pk": 44,
+    "fields": {
+      "libro": 29,
+      "fecha": "2017-12-02",
+      "tipo_comprobante": "F",
+      "letra": "C",
+      "sucursal": "1",
+      "nfactura": "2",
+      "cli_pro": 28,
+      "gravado": "34.00",
+      "no_gravado": "56.00",
+      "iva21": "0.00",
+      "iva105": "0.00",
+      "iva_otros": "0.00",
+      "rg2126": "0.00",
+      "ret_IVA": "0.00",
+      "ret_iibb": "0.00",
+      "imp_int": "0.00",
+      "otros": "0.00"
+    }
+  },
+  {
+    "model": "IVAcompras.detalle",
+    "pk": 45,
+    "fields": {
+      "libro": 29,
+      "fecha": "2017-12-03",
+      "tipo_comprobante": "F",
+      "letra": "C",
+      "sucursal": "1",
+      "nfactura": "3",
+      "cli_pro": 7,
+      "gravado": "565.00",
+      "no_gravado": "0.00",
+      "iva21": "456.00",
+      "iva105": "0.00",
+      "iva_otros": "0.00",
+      "rg2126": "0.00",
+      "ret_IVA": "0.00",
+      "ret_iibb": "0.00",
+      "imp_int": "567.00",
+      "otros": "0.00"
+    }
+  },
+  {
+    "model": "IVAcompras.detalle",
+    "pk": 46,
+    "fields": {
+      "libro": 29,
+      "fecha": "2017-12-06",
+      "tipo_comprobante": "F",
+      "letra": "C",
+      "sucursal": "1",
+      "nfactura": "4",
+      "cli_pro": 28,
+      "gravado": "23456.06",
+      "no_gravado": "5678.06",
+      "iva21": "0.00",
+      "iva105": "0.00",
+      "iva_otros": "0.00",
+      "rg2126": "0.00",
+      "ret_IVA": "0.00",
+      "ret_iibb": "0.00",
+      "imp_int": "0.00",
+      "otros": "0.00"
+    }
+  },
+  {
+    "model": "IVAcompras.detalle",
+    "pk": 47,
+    "fields": {
+      "libro": 30,
+      "fecha": "2017-12-01",
+      "tipo_comprobante": "F",
+      "letra": "A",
+      "sucursal": "1",
+      "nfactura": "876",
+      "cli_pro": 5,
+      "gravado": "45.00",
+      "no_gravado": "0.00",
+      "iva21": "0.00",
+      "iva105": "0.00",
+      "iva_otros": "0.00",
+      "rg2126": "0.00",
+      "ret_IVA": "0.00",
+      "ret_iibb": "0.00",
+      "imp_int": "0.00",
+      "otros": "0.00"
+    }
+  },
+  {
+    "model": "IVAcompras.detalle",
+    "pk": 48,
+    "fields": {
+      "libro": 30,
+      "fecha": "2017-12-05",
+      "tipo_comprobante": "F",
+      "letra": "A",
+      "sucursal": "1",
+      "nfactura": "987",
+      "cli_pro": 6,
+      "gravado": "569.00",
+      "no_gravado": "0.00",
+      "iva21": "0.00",
+      "iva105": "0.00",
+      "iva_otros": "0.00",
+      "rg2126": "0.00",
+      "ret_IVA": "0.00",
+      "ret_iibb": "0.00",
+      "imp_int": "0.00",
+      "otros": "0.00"
+    }
+  },
+  {
+    "model": "IVAcompras.detalle",
+    "pk": 49,
+    "fields": {
+      "libro": 30,
+      "fecha": "2017-12-03",
+      "tipo_comprobante": "F",
+      "letra": "A",
+      "sucursal": "1",
+      "nfactura": "1211",
+      "cli_pro": 8,
+      "gravado": "4567.00",
+      "no_gravado": "0.00",
+      "iva21": "0.00",
+      "iva105": "0.00",
+      "iva_otros": "0.00",
+      "rg2126": "0.00",
+      "ret_IVA": "0.00",
+      "ret_iibb": "0.00",
+      "imp_int": "0.00",
+      "otros": "0.00"
+    }
+  },
+  {
+    "model": "IVAcompras.detalle",
+    "pk": 50,
+    "fields": {
+      "libro": 30,
+      "fecha": "2017-12-11",
+      "tipo_comprobante": "F",
+      "letra": "A",
+      "sucursal": "1",
+      "nfactura": "58798",
+      "cli_pro": 9,
+      "gravado": "345.50",
+      "no_gravado": "0.00",
+      "iva21": "0.00",
+      "iva105": "0.00",
+      "iva_otros": "0.00",
+      "rg2126": "0.00",
+      "ret_IVA": "0.00",
+      "ret_iibb": "0.00",
+      "imp_int": "0.00",
+      "otros": "0.00"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 5,
+    "fields": {
+      "password": "pbkdf2_sha256$36000$yG8TZH6mwh5y$P62wfFZNCvhxzMmBnz25LcTAKOTfQ3lvooU4maXSS1g=",
+      "last_login": null,
+      "is_superuser": true,
+      "username": "demo",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2026-08-06T12:15:23.335Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+]
